@@ -3,17 +3,14 @@ name: Deploy Astro Blog to GitHub Pages
 on:
   push:
     branches:
-<<<<<<< HEAD
       - main
 
 permissions:
   contents: write
-=======
       - main # nếu repo chính của bạn là main
 
 permissions:
   contents: write # cho phép push lên gh-pages
->>>>>>> 930c1fd (fix)
   pages: write
   id-token: write
 
@@ -52,9 +49,8 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-<<<<<<< HEAD
           publish_branch: gh-pages
-=======
           publish_branch: gh-pages # branch chứa site đã build
           cname: "" # để trống nếu không dùng custom domain
->>>>>>> 930c1fd (fix)
+
+
