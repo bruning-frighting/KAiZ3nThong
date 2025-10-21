@@ -28,7 +28,7 @@ import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-cop
 // Lấy tên repository từ biến môi trường hoặc mặc định là 'KAiZ3n'
 const REPO_NAME = process.env.CI_REPO_NAME || 'KAiZ3nThong'; 
 export default defineConfig({
-	site: `https://<YOUR_GITHUB_USERNAME>.github.io/${REPO_NAME}/`, // Thay <YOUR_GITHUB_USERNAME> bằng username GitHub của bạn
+	site: `https://bruning-frighting.github.io/${REPO_NAME}/`, // Thay <YOUR_GITHUB_USERNAME> bằng username GitHub của bạn
 	base: `/${REPO_NAME}`, // Base path cho repository của bạn
 	trailingSlash: "always",
 	integrations: [
