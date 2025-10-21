@@ -1,6 +1,6 @@
 ---
 title: Trust Me! (ASCIS2024)
-published: 2025-10-21
+published: 2025-04-17
 description: ""
 image: ""
 tags: ["Malware"]
