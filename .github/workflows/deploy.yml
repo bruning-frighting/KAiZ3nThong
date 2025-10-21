@@ -47,8 +47,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-          publish_branch: gh-pages # branch chứa site đã build
+
           cname: "" # để trống nếu không dùng custom domain
+
 
 
 
