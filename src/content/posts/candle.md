@@ -6,7 +6,7 @@ image: ''
 tags: ['Forensics']
 category: 'Forensics'
 draft: false 
-lang: 'VI'
+lang: 'vi'
 ---
 
 # Candle - bounty PTIT HN-HCM CTF Finals 2025 forensic

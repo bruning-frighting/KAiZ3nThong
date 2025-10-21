@@ -25,9 +25,11 @@ import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
 
 // https://astro.build/config
+// Lấy tên repository từ biến môi trường hoặc mặc định là 'KAiZ3n'
+const REPO_NAME = process.env.CI_REPO_NAME || 'KAiZ3n'; 
 export default defineConfig({
-	site: "https://fuwari.vercel.app/",
-	base: "/",
+	site: `https://<YOUR_GITHUB_USERNAME>.github.io/${REPO_NAME}/`, // Thay <YOUR_GITHUB_USERNAME> bằng username GitHub của bạn
+	base: `/${REPO_NAME}`, // Base path cho repository của bạn
 	trailingSlash: "always",
 	integrations: [
 		tailwind({

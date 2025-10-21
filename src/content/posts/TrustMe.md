@@ -1,12 +1,12 @@
 ---
-title: TrustMe
+title: Trust Me! (ASCIS2024)
 published: 2025-10-21
 description: ''
 image: ''
 tags: ['Malware']
 category: 'Network Analysis, Reverse Engineering, Malware Analysis'
 draft: false 
-lang: ''
+
 ---
 
 
@@ -703,6 +703,3 @@ with open("pic.bmp", "wb") as f:
 
 
 PS: Cảm ơn mọi người đã đọc và cảm ơn author vì qua challenge này mình học thêm được rất nhiều thứ mới lạ.
-
-
-
