@@ -3,10 +3,10 @@ name: Deploy Astro Blog to GitHub Pages
 on:
   push:
     branches:
-      - main  # nếu repo chính của bạn là main
+      - main
 
 permissions:
-  contents: write      # cho phép push lên gh-pages
+  contents: write
   pages: write
   id-token: write
 
@@ -19,31 +19,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node & pnpm
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+          cache: 'pnpm'
 
+      # 3️⃣ Setup pnpm (⚠️ BẮT BUỘC — bạn đang thiếu bước này)
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
           version: 9
 
-      # 3️⃣ Cài dependencies
+      # 4️⃣ Cài dependencies
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 4️⃣ Build Astro
+      # 5️⃣ Build Astro
       - name: Build Astro project
         run: pnpm run build
 
-      # 5️⃣ Deploy lên GitHub Pages
+      # 6️⃣ Deploy lên GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          publish_branch: gh-pages   # branch chứa site đã build
-          cname: ''                  # để trống nếu không dùng custom domain
+          publish_branch: gh-pages
