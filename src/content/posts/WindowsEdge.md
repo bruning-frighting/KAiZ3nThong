@@ -1,17 +1,20 @@
 ---
 title: HTB Window's Infinity Edge
 published: 2025-07-24
-description: This is one of challenge which I liked the most of HTB series
-tags: [Debugging, Traffic Analysis]
-category: Shellcode
-draft: false
+description: ''
+image: ''
+tags: [Networking, MalwareAnalysis, Shellcode]
+category: 'Malware Analysis'
+draft: false 
+lang: ''
 ---
+
 
 # HTB Window's Infinity Edge
 >author : kAiZ3n
 >Decription : A motivated APT group has breached our company and utilized custom tooling. We've identified the implants on compromised systems and remediated the infection using advanced AntiVirus X. However, one server seems clean but has been exhibiting suspicious traffic. Can you spot something we could have missed while cleaning this system?
 ## Xử lý file pcap
-![image](./markdown/HyUa_qAIlx.png)
+![image](https://hackmd.io/_uploads/HyUa_qAIlx.png)
 
 - Đầu tiên ta thấy Client gửi request tới server thông qua format multi data và ta thấy client đã Post một file upload.apsx thông qua /upload
 tại lúc xử lý file tôi thấy nó sử dụng một Class Assembly.Load() đây được coi là red flag thường được dùng load các mal EXE or DLL
@@ -19,9 +22,9 @@ tại lúc xử lý file tôi thấy nó sử dụng một Class Assembly.Load()
 - sau đó nó sẽ truyền parameter vào là p and r
 - p là dữ liệu người dùng trong requestFrom từ "data"
 - r là hardcode 
-![payload](./markdown/HJtyO90Lge.jpg)
+![payload](https://hackmd.io/_uploads/HJtyO90Lge.jpg)
 trích xuất ra file payload.exe check file nhanh với die thì đây là file .NET load vào ILSPY để đọc source
-![image](./markdown/S1i4O90Lxx.png)
+![image](https://hackmd.io/_uploads/S1i4O90Lxx.png)
 
 - RequestForm["data"] là phân vùng bị enc code
 - r là password như một hardcode key
@@ -164,3 +167,4 @@ và tiếp tục xor để lấy flag
 ![image](https://hackmd.io/_uploads/SkTrrqA8xg.png)
 
 PS: Bài này mình thấy khá là nặng về Obfuscation và Reverse Engineering nếu như intend solution không cần phải guessy
+
