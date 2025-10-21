@@ -26,7 +26,7 @@ import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-cop
 
 // https://astro.build/config
 // Lấy tên repository từ biến môi trường hoặc mặc định là 'KAiZ3n'
-const REPO_NAME = process.env.CI_REPO_NAME || 'KAiZ3n'; 
+const REPO_NAME = process.env.CI_REPO_NAME || 'KAiZ3nThong'; 
 export default defineConfig({
 	site: `https://<YOUR_GITHUB_USERNAME>.github.io/${REPO_NAME}/`, // Thay <YOUR_GITHUB_USERNAME> bằng username GitHub của bạn
 	base: `/${REPO_NAME}`, // Base path cho repository của bạn
