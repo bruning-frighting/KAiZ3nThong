@@ -1,12 +1,12 @@
 ---
-title: Anti-ChatGPT
-published: 2025-10-21
-description: ''
-image: ''
-tags: ['Reverse Engineering', 'Shellcode']
-category: 'Malware Analysis'
-draft: false 
-lang: 'VI'
+title: Anti ChatGPT PRO (PTITCTF)
+published: 2025-09-21
+description: ""
+image: ""
+tags: ["Reverse Engineering", "Shellcode"]
+category: "Malware Analysis"
+draft: false
+lang: "VI"
 ---
 # Anti ChatGPT PRO (PTITCTF)
 >Anti ChatGPT Pro ⭐️🧠

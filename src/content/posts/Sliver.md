@@ -2,11 +2,11 @@
 title: Sliver-C2 framework
 published: 2024-06-20
 updated: 2024-11-29
-description: 'Read more about Sliver Framework C2 detection'
-image: ''
+description: "Read more about Sliver Framework C2 detection"
+image: ""
 tags: [C2 framework, Malware Analysis]
-category: 'Sliver-C2'
-draft: false 
+category: "Sliver-C2"
+draft: false
 ---
 # Sliver-C2 framework
 
@@ -251,4 +251,3 @@ Question 6 : temp.exe
 Question 7: enc
 Question 8 : YOU HAVE BEEN HACKED. IF YOU WANT TO RECOVER YOUR DATA, PLEASE CONTACT ME VIA DISCORD tr0n9_t4m (folder) drwxrwxrwx
 ** Đáp án : C:\Users\Administrator\Downloads**
-

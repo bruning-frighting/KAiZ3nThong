@@ -1,12 +1,11 @@
 ---
 title: Trust Me! (ASCIS2024)
 published: 2025-10-21
-description: ''
-image: ''
-tags: ['Malware']
-category: 'Network Analysis, Reverse Engineering, Malware Analysis'
-draft: false 
-
+description: ""
+image: ""
+tags: ["Malware"]
+category: "Network Analysis, Reverse Engineering, Malware Analysis"
+draft: false
 ---
 
 

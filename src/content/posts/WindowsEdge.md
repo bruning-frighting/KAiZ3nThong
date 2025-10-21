@@ -1,12 +1,12 @@
 ---
 title: HTB Window's Infinity Edge
 published: 2025-07-24
-description: ''
-image: ''
+description: ""
+image: ""
 tags: [Networking, MalwareAnalysis, Shellcode]
-category: 'Malware Analysis'
-draft: false 
-lang: ''
+category: "Malware Analysis"
+draft: false
+lang: ""
 ---
 
 
@@ -167,4 +167,3 @@ và tiếp tục xor để lấy flag
 ![image](https://hackmd.io/_uploads/SkTrrqA8xg.png)
 
 PS: Bài này mình thấy khá là nặng về Obfuscation và Reverse Engineering nếu như intend solution không cần phải guessy
-
