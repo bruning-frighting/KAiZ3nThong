@@ -6,36 +6,39 @@ on:
       - main
 
 permissions:
-  contents: write # cho phép push lên gh-pages
+  contents: write
   pages: write
   id-token: write
+  actions: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    steps: # 1️⃣ Checkout repo
+    steps:
+      # 1️⃣ Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js
+      # 2️⃣ Setup pnpm TRƯỚC Node.js để nó tồn tại trong PATH
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
+      # 3️⃣ Setup Node.js (có cache pnpm)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
 
-      # 3️⃣ Setup pnpm (⚠️ BẮT BUỘC — bạn đang thiếu bước này)
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
-
       # 4️⃣ Cài dependencies
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 5️⃣ Build Astro
+      # 5️⃣ Build Astro project
       - name: Build Astro project
         run: pnpm run build
 
@@ -46,10 +49,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           publish_branch: gh-pages
-
-          cname: "" # để trống nếu không dùng custom domain
-
-
-
-
-
+          cname: ""
