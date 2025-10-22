@@ -16,7 +16,7 @@ I have been sharpening my skills and knowledge through **domestic and internatio
   - 🥇 Top 7 – Kashi CTF 2024  
   - 🥇 Top 23 – DeadFace CTF 2024  
   - 🥇 Top 7 – ACECTF 2024  
-  - 🥇 Top 23 – BugCrowd BlackHat USA CTF 2024  
+  - 🥇 Top 23 – H7Tex international 2024
   - 🥇 Top 22 – KnightCTF 2024  
   - 🥇 Top 9 – VishwaCTF 2025  
   - 🥇 Top 8 – BlitzCTF 2025  
