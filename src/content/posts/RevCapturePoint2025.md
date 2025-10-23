@@ -33,10 +33,10 @@ First I see the program was using ws_32.dll to open socket connect with TCP
 ```
 Here is The program was looking Source for "cp" on itself PEs file with the size of resource == 0x42 we'll use PEbear and HxD to look up exactly value it 
 and it seems ipaddr and port to open socket was be obfuscated in cp variable and this func for handling 
-![image](https://hackmd.io/_uploads/HypI4ucTkg.png)
+![image](/images/hackmd/HypI4ucTkg.png)
 in the key logic in this func , which'll create key and decrypt RC4
 Here is func created key 
-![image](https://hackmd.io/_uploads/ByUSrd9aJl.png)
+![image](/images/hackmd/ByUSrd9aJl.png)
 ```
 def generate_key(data: bytes) -> bytes:
     return bytes([b ^ 0x2F for b in data])
@@ -58,21 +58,21 @@ and then we'll find data of "CONFIG" resouce to decrypt it with key above in PE 
 After Decrypting I got Ip address of attacker 
 - ip.addr == 192.168.138.67
 - port == cp[32] == "P" == to int == 80
-![image](https://hackmd.io/_uploads/Sy8gdv9TJg.png)
+![image](/images/hackmd/Sy8gdv9TJg.png)
 Oke the next step I'll start proccessing pcap file with available details also we looked up 
-![image](https://hackmd.io/_uploads/HkLq_wq6kg.png)
+![image](/images/hackmd/HkLq_wq6kg.png)
 I recognized attacker sended out a few encrypted payload to client and processed it as commandHandler program . ThereFore I looked up API call recv from ws_32.dll windows to check it out
 At here 
-![image](https://hackmd.io/_uploads/HJNUtPqa1e.png)
+![image](/images/hackmd/HJNUtPqa1e.png)
 the payload sended out in sub_1400020C0()
 and then I'll analysis sub_1400020C0 function
-![image](https://hackmd.io/_uploads/Hk1AYD9p1e.png)
+![image](/images/hackmd/Hk1AYD9p1e.png)
 the key logic in here the payload'll be decrypted with base64 and then it'll compare the first char if it == "D" which slipt command with delitermine "|" and then store them in v10 and the next in v11
 Otherwise if it == "E" which decrypted one more with payload'll be send it in sub_1400019F0 (I'll replace sub_1400019F0 to CommandHandler for convinient with my next process)
 and after handling it'll split the same with condition of char "D"
 the logic code of commandHandler func as decrypting use XXTEA alogrithm
 Because the payload 1 was be recognized as "D" condition so it use v10 = "KEYEXCH" and v11 = "ENCRYPTTRAFFIK07" and this case'll save data of qword_1400086F0 as key for decrypting in CommandHandler
-![image](https://hackmd.io/_uploads/ryuonwc6yl.png)
+![image](/images/hackmd/ryuonwc6yl.png)
 we'll use it to decrypting with "E" condition 
 I wrote script for decrypting 
 ```
@@ -169,20 +169,20 @@ Input 6:
 Amazing when it's using port 8080 to download the payload else 
 when it run in "DOWNEXEC" case 
 
-![image](https://hackmd.io/_uploads/Hk7sRvcpJg.png)
+![image](/images/hackmd/Hk7sRvcpJg.png)
 oke let'go,we look at the PCAP file a bit
-![image](https://hackmd.io/_uploads/SJW6i39akg.png)
+![image](/images/hackmd/SJW6i39akg.png)
 As with Payload, I was Decrypt, now come back to source code IDA
 the strings'll continuely split with v22 = "DEKRYPT" , v25 ="0" (if input 5 and = "1" with input 6) and then it'll convert bytes to UNICODE and v25 = v22 = "DEKRYPT" and sub_140002890() will continue handling the payload data.png or data.txt I follow to this function and I recoginzed the meaning of the last char of input for "0/1"
 if it is "0" which will download file and save in folder **%temp%\kri<randomstring>.tmp** or it is "1" which will  download file and run this file  with ```<namefile> "DEKRYPT"```
 I'll download file data.txt with parameter "1" to figure it out doing
 The file is PEs be written by C program 
-![image](https://hackmd.io/_uploads/ryb8-_qa1g.png)
+![image](/images/hackmd/ryb8-_qa1g.png)
 At main code it using argv[1] to convert Unicode and send it in sub_140001260
-![image](https://hackmd.io/_uploads/HkaO-_9pJx.png)
+![image](/images/hackmd/HkaO-_9pJx.png)
 at the key logic of this func is using AES algorithm with key was using the hash algorithm '**sha256 of"DEKRYPT"**' from **argv[1]** ran with the first PE with CreateProcess at v27 variable 
-    ![image](https://hackmd.io/_uploads/rJTyGu5p1g.png)
+    ![image](/images/hackmd/rJTyGu5p1g.png)
 and the encrypted data is data.png (data.png I got it from pcap tcp stream of ip.addr==192.168.138.67 and tcp.port==8080)
 oke After grabs logic code I'll handle data.png decrypt it with key "DEKRYT" and got flag 
 nai xừ :D
-![image](https://hackmd.io/_uploads/HkCyQu5aJl.png)
+![image](/images/hackmd/HkCyQu5aJl.png)

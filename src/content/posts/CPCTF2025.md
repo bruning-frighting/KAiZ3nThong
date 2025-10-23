@@ -57,12 +57,12 @@ EventID:
 
 I try to use EvtxCMD.exe and Timeline to hunt malicous script of Windefender log and the eventid 1116 gave me a notice that have a file python to be detected which Trojan
 
-![image](https://hackmd.io/_uploads/rJb29cMkle.png)
+![image](/images/hackmd/rJb29cMkle.png)
 fullpath : _C:\Users\User\Documents\workspaces\marktype\node_modules\@n37scancp\highlight.js\this_is_not_flag.py
 
 "I immediately tracked the filesystem, but it seems the file was deleted by the user or attacker. I suspect the file might have been renamed or replaced. I checked the MPLog and found the hash of the file, then submitted it to VirusTotal for dynamic analysis. The result identified it as a trojan, with the file name evil.py
-![image](https://hackmd.io/_uploads/ryu439f1ge.png)
-![image](https://hackmd.io/_uploads/rJwS2cfyxe.png)
+![image](/images/hackmd/ryu439f1ge.png)
+![image](/images/hackmd/rJwS2cfyxe.png)
 ### Username's attacker
 To get username for applying malicous code 
 I was process and extract folder workspace go to marktype repo and read log

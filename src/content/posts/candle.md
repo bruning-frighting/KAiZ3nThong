@@ -10,14 +10,14 @@ lang: 'vi'
 ---
 
 # Candle - bounty PTIT HN-HCM CTF Finals 2025 forensic
-![image](https://hackmd.io/_uploads/ryKvW80jxx.png)
+![image](/images/hackmd/ryKvW80jxx.png)
 
 Nhận một file rawdata PEPPER và file mp4 
 - Ở file mp4 Thấy file mp3 khá lớn khi check strings có các header lạ
-![image](https://hackmd.io/_uploads/H1lKdwRjxl.png)
+![image](/images/hackmd/H1lKdwRjxl.png)
 - Dùng binwalk để dump file mp4 ra vì
-![image](https://hackmd.io/_uploads/SJU6dwAoxg.png)
-![image](https://hackmd.io/_uploads/HJgAdwRsxl.png)
+![image](/images/hackmd/SJU6dwAoxg.png)
+![image](/images/hackmd/HJgAdwRsxl.png)
 có điểm đáng chú ý là file manifest.json (nó làm một file cấu hình cho việc lấy flag)
 ```
 └─$ strings a/out_tiles/manifest.json
@@ -213,11 +213,11 @@ Với từng entry trong "pieces":
 Ví dụ: piece_19.png có {r:3, c:1} → dán vào tọa độ (1×82, 3×98) = (82, 294).
 Sau khi ghép đủ 30 mảnh, crop bỏ phần padding (2 px bên phải) → còn lại 490 × 490 px đúng kích thước gốc.
 Nhưng sau khi tôi làm vậy viết script vẫn không recovery lại được ảnh gốc tôi nghi ngờ các file name đã bị scamble tôi đã thử kiểm tra file với exiftool thì thấy mỗi file đều có một trường Pos dường như tương ứng với các tọa độ
-![image](https://hackmd.io/_uploads/Skp7qDRseg.png)
+![image](/images/hackmd/Skp7qDRseg.png)
 Dùng exiftol -pos để truy xuất các POS tương tứng với mỗi file
-![image](https://hackmd.io/_uploads/HJvXivRoex.png)
+![image](/images/hackmd/HJvXivRoex.png)
 Lấy được tọa độ ma trận rồi giờ ta tiến hành ghép lại ảnh
-![code](https://hackmd.io/_uploads/SJkhivAjlx.png)
+![code](/images/hackmd/SJkhivAjlx.png)
 
 ```
 ┌──(thong㉿DESKTOP-SD4MBKE)-[/mnt/c/users/tttho/downloads/a/out_tiles]
@@ -227,37 +227,37 @@ Done.
 - reconstructed.png: 490x490
 - grid:              5 rows x 6 cols; tile=82x98
 ```
-![reconstructed](https://hackmd.io/_uploads/HJEZaw0sex.png)
+![reconstructed](/images/hackmd/HJEZaw0sex.png)
 đây là image sau khi recovery là một mã QR quét thì ra được một link 
 truy cập vào có một bài post
-![image](https://hackmd.io/_uploads/BJNPaDCiel.png)
+![image](/images/hackmd/BJNPaDCiel.png)
 decryption base64 chuỗi ra flag fake
 ```
 ─$ echo "VGhpcyBpcyBmbGFnOiBQVElUQ1RGe1ZpZXROYW1NdW9uTmFtfQ==" | base64 -d
 This is flag: PTITCTF{VietNamMuonNam}
 ```
 còn một chuỗi ký tự rất lạ tôi đoán làm một url đã bị scamble
-![image](https://hackmd.io/_uploads/H16gADRoxl.png)
+![image](/images/hackmd/H16gADRoxl.png)
 check nhanh với trang dcode oke no đã bị ROT13
-![image](https://hackmd.io/_uploads/Skr7RD0jee.png)
+![image](/images/hackmd/Skr7RD0jee.png)
 một link github download một file exe 
 Download file về và nhận diện signature file với die
-![image](https://hackmd.io/_uploads/HJAi0v0sex.png)
+![image](/images/hackmd/HJAi0v0sex.png)
 
 ## Phân tích file candlegame.exe
 
 Hàm start sẽ gọi sub_140001180() -> sub_140189EE0 (main code)
 Logic hàm Sub_140001180 như một hàm init dùng để check ngoại lệ và xử lý nếu không sẽ gọi tới maincode (sub_140189EE0)
-![image](https://hackmd.io/_uploads/SJQxSLRoxl.png)
+![image](/images/hackmd/SJQxSLRoxl.png)
 Tại ô khoanh đó đang xây dựng một mảng argv[] để truyền vào main code
 => v14 là *argv
 => qword_14020E020 là argc
 ## maincode ( application GUI )
 Tại hàm maincode dựng một application GUI do hàm main này khá phức tạp nên tôi sẽ không đi theo hướng phân tích hàm này tôi sẽ tìm kiếm các API nghi ngờ 
-![image](https://hackmd.io/_uploads/SJl7IUCoxg.png)
+![image](/images/hackmd/SJl7IUCoxg.png)
 thấy chương trình sử dụng bcrypt.dll và các API liên quan đến việc decryption/ derived key
 xref tới API BcryptDecrypt -> trỏ về hàm gọi nó
-![image](https://hackmd.io/_uploads/HJnv8LAixe.png)
+![image](/images/hackmd/HJnv8LAixe.png)
 Hàm được gọi từ sub_1400E6960+253
 ## sub_1400E6960 (decryption AES)
 ```
@@ -491,7 +491,7 @@ hàm này được gọi từ sub_1400037B0
 Nhìn vào hàm sub_1400037B0, đây là một hàm khởi tạo / giải mã dữ liệu cấu hình được mã hóa và nhúng sẵn trong chương trình.
 Mình tóm tắt logic của nó như sau:
 
-![image](https://hackmd.io/_uploads/Hy4sPICjgg.png)
+![image](/images/hackmd/Hy4sPICjgg.png)
 
 **1. Chuỗi base64**
 - Đây là một chuỗi Base64 rất dài.
@@ -656,15 +656,15 @@ if (*v3 != 877020995) ...
 Giá trị 877020995 = 0x34544643 (ASCII: "CFT4").
 Tức là dữ liệu sau khi base64 decode phải bắt đầu bằng một magic header "CFT4" (hay "CandleFT4"?).
 Nếu sai → return rỗng.
-![image](https://hackmd.io/_uploads/ryCTqURiel.png)
+![image](/images/hackmd/ryCTqURiel.png)
 check header và bỏ quá 0x44 bytes lấy phần cipher check các block 16bytes xem đủ không
-![image](https://hackmd.io/_uploads/SyxSsICogx.png)
+![image](/images/hackmd/SyxSsICogx.png)
 chỉ định các Provider bước init trước khi tạo ***hash và decryption***
 
 **3. Tính & kiểm tra HMAC**
 Sau đó, nó dùng SHA256 để derived key (pbSecret 32bytes) với salt/nonce trong cipher
-![image](https://hackmd.io/_uploads/Bk8DlwAieg.png)
-![image](https://hackmd.io/_uploads/BkkZZwCsxg.png)
+![image](/images/hackmd/Bk8DlwAieg.png)
+![image](/images/hackmd/BkkZZwCsxg.png)
 pbInput giống với file PEPPER => file này là file cấu hình cho chương trình lấy key nhưng do file đã được chạy rồi hoặc được dump từ memory nên hardcode hoặc file đã được nhúng hardcode từ trước
 Derived Key
 Chương trình đọc file PEPPER (32 bytes secret). Từ secret này và Salt trong cipher, nó sinh ra key bằng cách băm:
@@ -677,7 +677,7 @@ K2 = key dùng cho HMAC-SHA256 verify.
 
 **4.Tính HMAC để xác thực**
 Nó không decrypt ngay, mà hash kiểm tra trước:
-![image](https://hackmd.io/_uploads/H1PyGDCixe.png)
+![image](/images/hackmd/H1PyGDCixe.png)
 
 Tại đây ta quay lai một chút ở phần ciphertext
 Format header cipher
@@ -705,7 +705,7 @@ Ciphertext = phần sau offset 0x44
 Giải mã theo chuẩn AES-256-CBC. Plaintext kết quả được trả về trong vùng nhớ Block.
 
 Viết script giải mã
-![code](https://hackmd.io/_uploads/HynVDDRjle.png)
+![code](/images/hackmd/HynVDDRjle.png)
 
 ## Quay trở lại hàm maincode ban đầu đưa ra kết luận
 Đọc tham số bet

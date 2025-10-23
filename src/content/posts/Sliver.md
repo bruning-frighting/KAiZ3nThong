@@ -41,29 +41,29 @@ Press Enter to exit...
 
 **Question 1**
 ta sử dụng Windbg để debug file minidump
-![image](https://hackmd.io/_uploads/r1yhusor1x.png)
+![image](/images/hackmd/r1yhusor1x.png)
 chương trình đã bị crash tại process AMUSED_MILKSHAKE
 tiến hành dump process đó ra kiểm tra với 
 
-![image](https://hackmd.io/_uploads/HyVNYioSkg.png)
+![image](/images/hackmd/HyVNYioSkg.png)
 đây là thông tin của module
 dùng lệnh **.writemem '%USER PROFILE%\outputfolder\...' start end**
 ```
 .writemem C:\Users\Username\Downloads\AMUSED_MILKSHAKE.bin 00920000 01a11000
 ```
 Khi có file ta đưa vào virustotal để quick scan
-![image](https://hackmd.io/_uploads/BJOE5ojSkl.png)
+![image](/images/hackmd/BJOE5ojSkl.png)
 ta có thể thấy đây là một trojan sliver 
 search google sliver framework
-![image](https://hackmd.io/_uploads/HyQq5ooSye.png)
+![image](/images/hackmd/HyQq5ooSye.png)
 
 **Đáp án 1 :** sliver
 
 **Question2:** 
 Check file pcap ta thấy được các gói http nghi vấn đến từ 192.169.1.108 chứa các chuỗi hex, base64, words lạ
-![image](https://hackmd.io/_uploads/B1hZojoryx.png)
-![image](https://hackmd.io/_uploads/SJM7iisS1x.png)
-![image](https://hackmd.io/_uploads/rkSVjsjBkg.png)
+![image](/images/hackmd/B1hZojoryx.png)
+![image](/images/hackmd/SJM7iisS1x.png)
+![image](/images/hackmd/rkSVjsjBkg.png)
 **Đáp án 2 :** 192.168.1.108
 
 **Question3:**
@@ -71,10 +71,10 @@ sau khi đã biết được attacker sử dụng Sliver-C2 framework
 tìm các bài blog có liên quan
 https://www.immersivelabs.com/blog/detecting-and-decrypting-sliver-c2-a-threat-hunters-guide
 
-![image](https://hackmd.io/_uploads/Hy_Z2osS1g.png)
+![image](/images/hackmd/Hy_Z2osS1g.png)
 trong blog có nói rõ về cách extract session key từ memory dump
 session key dùng để decrypt các payload trên network traffic
-![image](https://hackmd.io/_uploads/HkX8hosBke.png)
+![image](/images/hackmd/HkX8hosBke.png)
 Không may mắn là ta phải tìm key theo cách thủ công với Hex
 và thu nhỏ phạm vi tìm kiếm với Pattern
 ```
@@ -157,15 +157,15 @@ xong sử dụng sliver_decrypt.py cùng với key session để decrypt file ht
 như có vẻ không hoạt động tốt
 sau vài giờ kiểm tra tôi biết vấn đề nằm ở các định dạng file http-message.json 
 
-![image](https://hackmd.io/_uploads/rkZ3F2sBJg.png)
+![image](/images/hackmd/rkZ3F2sBJg.png)
 ta thấy các định dạng đã được đưa về hex không đúng như định dạng trong script decrypt
 ở chỗ words tôi bôi đỏ 
-![image](https://hackmd.io/_uploads/rkgMqhoHye.png)
+![image](/images/hackmd/rkgMqhoHye.png)
 đúng định dạng phải như này
 và gzip-b64 tôi sẽ đưa về b64 để dễ cho script decrypt hoạt động tốt tránh lỗi trong việc xử lý gunzip
-![image](https://hackmd.io/_uploads/ry0U93jryx.png)
+![image](/images/hackmd/ry0U93jryx.png)
 lúc này tôi sẽ sử dụng file http-message.json
-![image](https://hackmd.io/_uploads/SJIj5hoHJx.png)
+![image](/images/hackmd/SJIj5hoHJx.png)
 làm tương tự với các process trong file http-message.json
 sau khi đã sửa file http-message ta decrypt được
 ```
@@ -173,20 +173,20 @@ sau khi đã sửa file http-message ta decrypt được
 
 ```
 ta có được payload
-![image](https://hackmd.io/_uploads/B1g2nhjrkg.png)
+![image](/images/hackmd/B1g2nhjrkg.png)
 
 
 sau xong ta lấy tất cả hex của message data đem đi decode probobuf 
 https://protobuf-decoder.netlify.app/
 
-![image](https://hackmd.io/_uploads/BkOPp3jSye.png)
+![image](/images/hackmd/BkOPp3jSye.png)
 file payload chưa được decode protobuf
 bây giờ vào link trên để decode 
 khi decode ta thấy đây là một cuộc tấn công ransomware
 folder dc nhắm tới C:\Users\Administrator\Downloads
 
 
-![image](https://hackmd.io/_uploads/BJ1EA2iryx.png)
+![image](/images/hackmd/BJ1EA2iryx.png)
 khi chưa encrypt ransomware
 các file
 ```
@@ -243,9 +243,9 @@ C:\Users\Administrator\Downloads
 
 Question 5 : có file sample.png
 
-![image](https://hackmd.io/_uploads/SJt1WpiHye.png)
+![image](/images/hackmd/SJt1WpiHye.png)
 ta thấy dưới có payload được attacker gửi về server thông qua lệnh POST với request url http://192.168.1.108/oauth2/api/namespaces/oauth/oauth2/oauth2/samples.php?s=94728974
-![image](https://hackmd.io/_uploads/HkB3Waorye.png)
+![image](/images/hackmd/HkB3Waorye.png)
 **đáp án : notepad**
 Question 6 : temp.exe
 Question 7: enc

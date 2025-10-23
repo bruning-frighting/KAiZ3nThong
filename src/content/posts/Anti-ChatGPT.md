@@ -25,19 +25,19 @@ pass: ptitctf2025
 Bắt đầu với một mô tả khá chill chill :))
 ## Start
 Tại entry (Hàm start) Có gọi một số hàm lạ 
-![image](https://hackmd.io/_uploads/HkvkfCAigx.png)
-![image](https://hackmd.io/_uploads/r1LaW0Asex.png)
+![image](/images/hackmd/HkvkfCAigx.png)
+![image](/images/hackmd/r1LaW0Asex.png)
 
 Ta thấy logic khá đơn giản:
 - Mở socket với IP **127.0.0.1:1337** Send gửi data đi
 - Check Flag (nhận data gửi về và kiểm tra nếu chuỗi là "True" thì print ra Amazing good job ngược lại print ra "Wrong")
 ## Sub_1400248E0 (hàm khởi tạo)
 Sau khi check các hàm có một số hàm bị lỗi stack frame too long khiến IDA không thể compiled được nhưng ở hàm **sub_1400248E0** dương như là một hàm khởi tạo cho runtime chứa:
-![image](https://hackmd.io/_uploads/r1sSXRRjxe.png)
+![image](/images/hackmd/r1sSXRRjxe.png)
 **&unk_14002F030** trỏ tới duy nhất một offset 
-![image](https://hackmd.io/_uploads/BJ_F70Rolx.png)
-![image](https://hackmd.io/_uploads/rJQnmCAogl.png)
-![image](https://hackmd.io/_uploads/SknmcARjel.png)
+![image](/images/hackmd/BJ_F70Rolx.png)
+![image](/images/hackmd/rJQnmCAogl.png)
+![image](/images/hackmd/SknmcARjel.png)
 
 **&unk_14002F030 -> sub_140001900 ->  sub_140001740** Hàm này đáng chú ý vì nằm ngoài luồng logic kiểm tra flag, đồng thời chứa nhiều đoạn mã bất thường.
 > Note : Ban đầu mình đã reverse trước và rename lại tên hàm 
@@ -71,7 +71,7 @@ unsigned __int64 __fastcall sub_140023FA0(__int64 a1, unsigned __int64 a2, __int
 }
 ```
 Tiến hành giải mã chuỗi bytes bằng hàm **Xor_DEADBEEF**
-![image](https://hackmd.io/_uploads/HJPoPAAoxl.png)
+![image](/images/hackmd/HJPoPAAoxl.png)
 Theo tài liệu [Microsoft](https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/beginthread-beginthreadex?view=msvc-170), API _beginthreadex được sử dụng để tạo một thread mới tại một routine thực thi, và trong trường hợp này hàm GetProcAddress được dùng để lấy địa chỉ từ msvcrt.dll.
 Hàm sub_140024100 đóng vai trò là start address được truyền vào _beginthreadex.
 
@@ -273,21 +273,21 @@ Key **XOR 8 byte** dùng để giải mã **payload** trước khi **WriteProces
 Tóm lại: hàm này thực hiện process injection kiểu create-remote-thread-hijack trên svchost.exe bị treo: giải mã tên API và payload, ghi shellcode vào tiến trình con, chỉnh RIP của thread chính đến shellcode, rồi resume để chạy
 
 Tính toán key 
-![image](https://hackmd.io/_uploads/BJfbA00sex.png)
+![image](/images/hackmd/BJfbA00sex.png)
 Từ đó, ta tính được key giải mã là **b"CHATGPT"**, dùng để dump và giải mã shellcode.
-![image](https://hackmd.io/_uploads/HyBN0CAjgx.png)
+![image](/images/hackmd/HyBN0CAjgx.png)
 Tôi nạp phần shellcode vào BinaryNinja và thiết lập base address là 0x1B000.
 Khi thực thi, hàm sub_140024100 đặt con trỏ lệnh (RIP) đến địa chỉ lpBaseAddress + 2432. Với cấu hình base address = 0x1B000, địa chỉ này trỏ đến offset 0x1B980, chính là vị trí bắt đầu của main code để phân tích.
-![image](https://hackmd.io/_uploads/HkXhkkkngg.png)
+![image](/images/hackmd/HkXhkkkngg.png)
 
 Với các logic code quen thuộc đã được sử dụng ở file ban đầu giúp ta dễ dàng phân tích hơn vẫn sử dụng lại các hàm như Xor_DEADBEEF và PEB_ldr, parser_returnAddrAPI
 >Note: trong hình trên tôi đã rename lại tất cả biến với việc xor_deadbeef với các byteraw
 
 Đầu tiên, shellcode load hai thư viện ws2_32.dll và kernel32.dll để resolve các API cần thiết.
 Mở socket với các API như (WSASTARTUP, socket, inet_addr, htons, bind, listen, recv, send)
-![image](https://hackmd.io/_uploads/SJZwW1khll.png)
+![image](/images/hackmd/SJZwW1khll.png)
 Tiếp theo, shellcode load msvcrt.dll, tạo key RC4 thông qua sub_1b520, và dùng nó để giải mã payload đã được hardcode.
-![image](https://hackmd.io/_uploads/HkF1fJJhll.png)
+![image](/images/hackmd/HkF1fJJhll.png)
 
 **Tóm tắt lại tiến trình con svchost.exe:**
 - Resolve DLL/API bằng PEB + tên bị XOR
@@ -313,7 +313,7 @@ Gọi **sub_1b520("546423423634")** để tạo key RC4:
 - Sau đó nó sẽ gửi lại Tiến trình cha là "Wrong" hay "True"
 **-> Hardcode buffer sau khi decryption RC4 là flag dùng để kiểm tra input từ tiến trình cha.**
 ## Decryption blob (0x1e)
-![code](https://hackmd.io/_uploads/Sko87J1ngl.png)
+![code](/images/hackmd/Sko87J1ngl.png)
 ```
 Output:
 Cipher (hex): 7a5c600ca5d7e7480316ed0e5bb2d9bf01eec9bdbcc1b94c0dc67fb3a1eb
@@ -321,7 +321,7 @@ Key (hex)   : 546423423634  / ASCII: Td#B64
 Plain (hex) : 505449544354467b346e74695f636834745f6750745f5072305f6b6b6b7d
 Plain (ascii): PTITCTF{4nti_ch4t_gPt_Pr0_kkk}
 ```
-![image](https://hackmd.io/_uploads/rkfyTQW3xl.png)
+![image](/images/hackmd/rkfyTQW3xl.png)
 
 **Tóm tắt toàn bộ chương trình:**
 - Tiến trình cha khởi tạo tiến trình con svchost.exe (chứa logic check flag input)

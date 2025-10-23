@@ -11,9 +11,9 @@ draft: true
 >author: kAiZ3n
 
 
-![image](https://hackmd.io/_uploads/S1pIOBUUgg.png)
-![image](https://hackmd.io/_uploads/B1Jd_BIIex.png)
-![image](https://hackmd.io/_uploads/SkpF_B8Uxx.png)
+![image](/images/hackmd/S1pIOBUUgg.png)
+![image](/images/hackmd/B1Jd_BIIex.png)
+![image](/images/hackmd/SkpF_B8Uxx.png)
 
 
 File Important.vhd là NTFS file system trong đó có tệp meeting bị encryption file system (EFS)
@@ -115,14 +115,14 @@ dump $LOGGED_UNTILITY_STREAM  và $DATA ra phân tích với 010_EDITOR cùng v�
 PS D:\CTFchall> D:\CTFchall\tools\sleuthkit-4.14.0-win32\bin\icat -o 128 .\Important5.vhd 38-256-6 > encrypted_FEK.bin
 PS D:\CTFchall> D:\CTFchall\tools\sleuthkit-4.14.0-win32\bin\icat -o 128 .\Important5.vhd 38-128-7 > encrypted_data.bin
 ```
-![image](https://hackmd.io/_uploads/BkUZkvB8xe.png)
+![image](/images/hackmd/BkUZkvB8xe.png)
 
 có được username: user@DESKTOP-EMMENVK được phép đọc file
 
 check username ở SAM bên file Ransom.ad1 để lấy UUID
 ta có S-1-5-21-80072447-1058360311-2986813321-1000
 ### Trích xuất Encrypted FEK
-![image](https://hackmd.io/_uploads/HJ7ClPrUxe.png)
+![image](/images/hackmd/HJ7ClPrUxe.png)
 sau khi trích xuất xong ta cần phải có được User's RSA PrivateKey để decrypt lấy key AES 
 ### Trích RSA Private Key và RSA Public Key
 
@@ -135,24 +135,24 @@ ta có được file bccd3883a0e4079440c3e01f1dabc363_0e81a3b6-c958-4a7e-ae5f-77
 
 crack user's password với DPAPImk2john
 
-![image](https://hackmd.io/_uploads/B1-L8z8Ile.png)
-![image](https://hackmd.io/_uploads/r1hULG8Ull.png)
+![image](/images/hackmd/B1-L8z8Ile.png)
+![image](/images/hackmd/r1hULG8Ull.png)
 Ta có được user's password là "user1234"
 Dùng user's password lấy masterkey
-![image](https://hackmd.io/_uploads/SJEoYVULge.png)
+![image](/images/hackmd/SJEoYVULge.png)
 Có masterkey rồi dùng nó để lấy RSA privatekey
 Lệnh lấy RSA Privatekey
 ```
 mimikatz # dpapi::capi /in:"E:\EvanCarter_DISK.E01_NONAME [NTFS]\[root]\Users\user\AppData\Roaming\Microsoft\Crypto\RSA\S-1-5-21-80072447-1058360311-2986813321-1000\bccd3883a0e4079440c3e01f1dabc363_0e81a3b6-c958-4a7e-ae5f-778aef9f5ac6" /masterkey:222ee001341a7cefe498cc14e9523777246b31868d1277d239c854ed122cfd9755dcae1bd9bb9ab64dfa7d9278ddb24cc0e337fbfbe7c16f5baa338f82fca93b
 ```
-![image](https://hackmd.io/_uploads/BJMzY4UIxl.png)
+![image](/images/hackmd/BJMzY4UIxl.png)
 
 tiếp theo trích xuất public key từ SystemCertificate
 đây là     guidMasterKey      : {fc901760-7d3c-4e67-a987-e80f876d9086} và pUniqueName 
 dựa theo xác định file trong Certificate
 
 
-![image](https://hackmd.io/_uploads/BJyTcEULxx.png)
+![image](/images/hackmd/BJyTcEULxx.png)
 
 Dùng openssl để covert các cert thành pem
 ```
@@ -169,11 +169,11 @@ có RSA private key tôi sẽ decyption FEK blob trong file encrypted_FEK.bin
 ```
 PS C:\Users\tttho> openssl pkeyutl -decrypt -inkey  D:\CTFchall\htb\private.pem  -in D:\CTFchall\reserved_encrypted_FEK.bin -out D:\CTFchall\keyAES.bin
 ```
-![image](https://hackmd.io/_uploads/HyUWErIUee.png)
+![image](/images/hackmd/HyUWErIUee.png)
 16 bytes đầu là pData blob chứa metadata của key
 
 #### Decrypt data enc EFS 
-![image](https://hackmd.io/_uploads/B1SqBBUUgg.png)
+![image](/images/hackmd/B1SqBBUUgg.png)
 
 có vẻ bị thiếu gì đó tôi đã cố gắn dùng Active Editor Disk để khôi phục cluster của file mã hóa đầy đủ nhưng không được
 
@@ -189,6 +189,6 @@ Certificate "user" already in store.
 CertUtil: -importPFX command completed successfully.
 ```
 do tôi đã import trước đó bây giờ bạn vào properties -> advance 
-![image](https://hackmd.io/_uploads/ByX1vBUIle.png)
+![image](/images/hackmd/ByX1vBUIle.png)
 Bỏ chọn Encrypt contents to secure data
-![image](https://hackmd.io/_uploads/SJQfDSIIxg.png)
+![image](/images/hackmd/SJQfDSIIxg.png)

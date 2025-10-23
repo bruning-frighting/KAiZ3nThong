@@ -12,7 +12,7 @@ draft: false
 >https://drive.google.com/file/d/1aQ4lWR_vrqWwPLwf6gJj2FDFbbfyGNHB/view?usp=drive_link
 >The chall name says it all !
 >https://www.deadsec.xyz/instances/f-forensics
-![image](https://hackmd.io/_uploads/B1bAkVIDex.png)
+![image](/images/hackmd/B1bAkVIDex.png)
 
 Trong team của tôi đã không có thời gian để solve challenge này vì ngày hôm sau chúng tôi có một cuộc thi CTF onsite supper guessy :))
 Nên bây giờ tôi sẽ làm lại 
@@ -116,11 +116,11 @@ Thông thường trong Volatility 3:
 - File Layer (Responsible for operating on the snapshot file)
 - Swap (Implements analysis for the swap partition)
 
-![image](https://hackmd.io/_uploads/ryc9RBUvgx.png)
+![image](/images/hackmd/ryc9RBUvgx.png)
 **The Kernel Layer is just a Virtual Layer (a layer that contains virtual addresses)**
-![image](https://hackmd.io/_uploads/r17T0SUvex.png)
+![image](/images/hackmd/r17T0SUvex.png)
 kiểm tra các lớp layers của file memory
-![image](https://hackmd.io/_uploads/B1bEgLLPel.png)
+![image](/images/hackmd/B1bEgLLPel.png)
 
 **-> đây là một file ELF snapshort**
 **RAW vs ELF snapshot**
@@ -150,34 +150,34 @@ Dựa vào sơ đồ:
 Và file memory mà ta đang phân tích là định dạng ELFSnapshort nên nó sẽ đi sang một lớp trung gian mới tới lớp memory layer là lớp base layer
 như khái niệm trên memory layer mới phản ánh đúng offset address trên disk
 
-![image](https://hackmd.io/_uploads/SJZbBD8vle.png)
+![image](/images/hackmd/SJZbBD8vle.png)
 
-![image](https://hackmd.io/_uploads/Hy_ufd8vgx.png)
+![image](/images/hackmd/Hy_ufd8vgx.png)
 
-![image](https://hackmd.io/_uploads/BJF9dwLDxg.png)
+![image](/images/hackmd/BJF9dwLDxg.png)
 
 
 
 
 Tiến hành xác định malicious process "malware-f"
-![image](https://hackmd.io/_uploads/Hk3ZiSIvlg.png)
+![image](/images/hackmd/Hk3ZiSIvlg.png)
 So sánh offset address từ pslist
-![image](https://hackmd.io/_uploads/H14UoSUwxx.png)
+![image](/images/hackmd/H14UoSUwxx.png)
 
 ### Dump process 
 Trong Linux kernel, task_struct là cấu trúc dữ liệu đại diện cho một process. Trường mm (memory descriptor) là con trỏ tới một cấu trúc mm_struct, đại diện cho không gian địa chỉ ảo của process. Đây là nơi kernel lưu thông tin về mappings (code, data, stack, v.v.).
 
 Xác định địa chỉ bắt đầu và địa chỉ cuối của file 
-![image](https://hackmd.io/_uploads/H18Ot8UPxx.png)
+![image](/images/hackmd/H18Ot8UPxx.png)
 
 
 
 Lấy raw data ở layer_name
-![image](https://hackmd.io/_uploads/S1jgpSUvxl.png)
+![image](/images/hackmd/S1jgpSUvxl.png)
 Đã bị error PagedInvalidAddressExcaption chuyển sang base_layer
-![image](https://hackmd.io/_uploads/S1IU6H8wlg.png)
+![image](/images/hackmd/S1IU6H8wlg.png)
 Chuyển sang memory layer
-![image](https://hackmd.io/_uploads/ryYYTrIvll.png)
+![image](/images/hackmd/ryYYTrIvll.png)
 
 
 ### Vì sao lỗi xảy ra?
@@ -186,7 +186,7 @@ Các khái niệm trước đã nói rõ mỗi process trong virtual address spa
 **Kết luận:**
 Giải pháp khắc phục, thay vì đọc tự động từ layer_name ra ta nên dùng Volatility 3 API đúng cách để tạo layer không gian địa chỉ người dùng của tiến trình:
 
-![image](https://hackmd.io/_uploads/SkEOZILDlx.png)
+![image](/images/hackmd/SkEOZILDlx.png)
 lúc này ta đã có thêm một layer của process sử dụng layer này để dump file 
 demo:
 
@@ -211,12 +211,12 @@ layer_name: Tên layer vật lý chứa dữ liệu thực tế
 Check nhanh với 16 bytes đầu
 ```
 Kiểm tra thử data tại memory layer
-![image](https://hackmd.io/_uploads/BJ34kdLvlg.png)
+![image](/images/hackmd/BJ34kdLvlg.png)
 
 Tiến hành dump file 
-![image](https://hackmd.io/_uploads/B1pbfUUPex.png)
+![image](/images/hackmd/B1pbfUUPex.png)
 
-![image](https://hackmd.io/_uploads/rkaXMUUwlx.png)
+![image](/images/hackmd/rkaXMUUwlx.png)
 
 bây giờ đã không còn lỗi nữa check file 
 
@@ -225,13 +225,13 @@ bây giờ đã không còn lỗi nữa check file
 └─$ file malware-f
 malware-f: data
 ```
-![image](https://hackmd.io/_uploads/rkACdI8Pgl.png)
+![image](/images/hackmd/rkACdI8Pgl.png)
 
 file đã bị mất đi header kiểm tra lại offset address file với plugin linux.proc.Maps để xác định các offset sau khi mapping
 
 Plugin linux.proc.Maps hiển thị Virtual Memory Mappings của từng tiến trình giống với nội dung /proc/[pid]/maps
 
-![image](https://hackmd.io/_uploads/BkB-d88Plx.png)
+![image](/images/hackmd/BkB-d88Plx.png)
 
 Clearly the base address of this file is started at 0x55bde0168000 but When I trace start address in volshell it displayed at 0x55bde0169000 we have lost 1000 bytes at header ELF files, We dump it again from 0x55bde0168000-0x55bde016e0000
 ```
@@ -278,16 +278,16 @@ b6e7756044984f2f5a0de3be9e6f2dbaf26ef1d0d4ebaddd35a7c1e21cf8a9c1  malware-f2
 b6e7756044984f2f5a0de3be9e6f2dbaf26ef1d0d4ebaddd35a7c1e21cf8a9c1  malware-f
 ```
 reverse file with IDAPro
-![image](https://hackmd.io/_uploads/HkxP9ILPle.png)
+![image](/images/hackmd/HkxP9ILPle.png)
 thấy các string liên quan đến sandbox như hypervisor and VMware xref tới kiểm tra
-![image](https://hackmd.io/_uploads/HyCFc8IDlg.png)
+![image](/images/hackmd/HyCFc8IDlg.png)
 đây rõ ràng là anti sandbox 
 ### Answer 3 : /proc/cpuinfo
 
 ### 4. The malware installed a fake service as a persistence mechanism, what was the service name ?
-![image](https://hackmd.io/_uploads/Hk2kiIIwgg.png)
+![image](/images/hackmd/Hk2kiIIwgg.png)
 tiếp tục check string 
-![image](https://hackmd.io/_uploads/HyLQoLUvxe.png)
+![image](/images/hackmd/HyLQoLUvxe.png)
 → Malware tạo một file service systemd giả mạo tên: **dbus.service**
 Sau đó nó tạo symbolic link từ file đó sang:
 ```
@@ -303,16 +303,16 @@ systemctl enable --now .dbus.service
 
 ### 5. The malware connects to two C2 IPs, what are they ? (ip1 - ip2)
 
-![image](https://hackmd.io/_uploads/rJuQh8Ivxx.png)
+![image](/images/hackmd/rJuQh8Ivxx.png)
 ### Answer 5 : 185.143.223.107 - 45.133.216.219
 
 ### 6.The malware copies itself and imitates a library, where is it stored ?
 copy chính nó chúng ta sẽ target đến /proc/self/exe
-![image](https://hackmd.io/_uploads/HJZs28Ivlx.png)
+![image](/images/hackmd/HJZs28Ivlx.png)
 ### Answer 6: /lib/.X11-unix/.X1
 
 ### 7. What command does the malware use to make the new copied file immutable ?
-![image](https://hackmd.io/_uploads/BkIR28Lvee.png)
+![image](/images/hackmd/BkIR28Lvee.png)
 
 ```
 sub_1886("/lib/.X11-unix/.X1", 1LL);
@@ -321,13 +321,13 @@ sub_1886("/lib/.X11-unix/.X1", 1LL);
 ### Answer 7 : chattr +i
 ### 8. What three debugging techniques does the malware specifically check for in its anti-debug routine ? (1-2-3)
 
-![image](https://hackmd.io/_uploads/rk5s68Lwge.png)
+![image](/images/hackmd/rk5s68Lwge.png)
 ### Answer 8 : LD_PRELOAD-strace-ltrace
 ### 9. Looks like the malware is injecting an ssh key, what type is this key ?
-![image](https://hackmd.io/_uploads/HyUR6UUDge.png)
+![image](/images/hackmd/HyUR6UUDge.png)
 ### Answer 9: ssh-ed25519
 ### 10. Where is that key being injected ? (full path)
-![image](https://hackmd.io/_uploads/rygGCLUPel.png)
+![image](/images/hackmd/rygGCLUPel.png)
 ### Answer 10 : /root/.ssh/authorized_keys
 ### 11. What command is the malware using to clear all traces of executed commands ?
 ```
@@ -349,7 +349,7 @@ __int64 sub_1E27()
 
 ### 12. How often is the log cleaning function being executed ? (in seconds)
 Hàm ở câu trên là hàm xóa log vì vậy ở hàm main có một vòng lập while true
-![image](https://hackmd.io/_uploads/rJtJJwLPxe.png)
+![image](/images/hackmd/rJtJJwLPxe.png)
 sleep(3600) trước khi xóa
 -> 3600
 ### Answer 12 : 3600

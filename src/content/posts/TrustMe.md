@@ -183,7 +183,7 @@ unsigned int __fastcall sub_881690(_BYTE *a1, const char *a2)
   return result;
 }
 ```
-![image](https://hackmd.io/_uploads/HyC4oiARJg.png)
+![image](/images/hackmd/HyC4oiARJg.png)
 mình đã sử dụng virustotal để nhận diện hash  là fnv nhưng có vẻ không kết thúc tại đó nó còn kết hợp thêm kỹ thuật giống như trong MurmurHash3
 Do không thể giả lập lại hàm hash mà ban đầu tôi đã đề cập sau khoảng thời gian mấy ngày mò docs cũng như tìm hiểu về API ws2_32.dll thì tôi nhận ra cách mà chương trình tạo ra một socket TCP đều dùng các FunctionCall quen thuộc (như send, recv, connect, bind, accept, listen) cùng với các các parameter dễ nhận dạng do đây là một file malware C2 nghi ngờ gửi dữ liệu từ target-attacker và ngược lại nên tôi search các function tạo một TCP connect()
 sau một hồi research 
@@ -357,10 +357,10 @@ Giai đoạn phân tích đi đến được đây coi như cũng dễ thở hơ
 nếu getaddrinfo thất bại chương trình sẽ return về **nonzero hay còn gọi là error code** sẽ đi tới LABEL_4
 và dùng ExitProcess() để terminal chương trình.
 nếu getaddrinfo thành công return 0
-![image](https://hackmd.io/_uploads/SySXdWHA1g.png)
+![image](/images/hackmd/SySXdWHA1g.png)
 và trả về các object của struct attackInfo
 tiếp theo chương trình sẽ tạo một socket với attackrinfo tại v2[116]
-![image](https://hackmd.io/_uploads/SyJlcWr01x.png)
+![image](/images/hackmd/SyJlcWr01x.png)
 
 
 Nếu socket tạo thành công sẽ gọi functionName connect() từ ws2_32.dll đã resolved APIhash với v2[119]
@@ -369,11 +369,11 @@ khi tạo thành công connect() chương trình đi tới LABLE_9 bắt đầu 
 
 ## tại LABEL_9
 nhận diện các functioncall thông qua các parameter thông dụng
-![image](https://hackmd.io/_uploads/BJGpkGS0Je.png)
+![image](/images/hackmd/BJGpkGS0Je.png)
 
 đầu tiên tại target nhận một key với buffer 512 từ attacker
 filter wireshark : ip.addr==192.168.89.136 and tcp.srcport==31337
-![image](https://hackmd.io/_uploads/ByWh3ZSRJe.png)
+![image](/images/hackmd/ByWh3ZSRJe.png)
 **key nhận từ attacker : "I'm_4_Gat3_K33per"**
 target sẽ gửi lại cho attacker 1 byte payload = 4 (do tại bước này mình vẫn chưa hiểu attacker send 1 bytes này làm gì nên mình sẽ giải thích ở dưới sau nếu các bạn thắc mắc hãy kéo xuống dưới)
 ```
@@ -383,7 +383,7 @@ send = resolve_APIhashing_ws2_32();
 
 theo dõi bên wireshark
 filter wireshark : ip.addr==192.168.89.136 and tcp.dstport==31337
-![image](https://hackmd.io/_uploads/HJWF3ZBRJg.png)
+![image](/images/hackmd/HJWF3ZBRJg.png)
 
 
 tiếp theo chương trình sử dụng hàm create_key_random((int) &savedregs)) với để tạo khóa
@@ -443,7 +443,7 @@ void __fastcall RC4_sendEnc(int data, int lenkey, const char *key)
 nó sẽ dùng rc4 để encrypt và sử dụng resolve_APIhashing_ws2_32() để lấy functionName : send() từ ws2_32.dll chức năng của hàm resolve_APIhashing_ws2_32 mình đã đề cập ở trên
 đây là payload đã send 4bytes len của key và ngay sau đó là key
 ban đầu tại đây mình nghĩ sẽ tạo ra 2 packet trên file pcapng và mình kh thấy packet nào hợp lệ sau khoảng thời gian mình nhận ra nó đã đc gửi cùng với nhau trong 1 packet và đây là payload của nó 
-![image](https://hackmd.io/_uploads/BJ3oeGBCyl.png)
+![image](/images/hackmd/BJ3oeGBCyl.png)
 vì đây là packet t2 sau khi send 0x04 
 payload có 68bytes : chia ra 2 phần 
 ```
@@ -455,7 +455,7 @@ encrypted-key : 918e87d161556ad2e40a89010adfe3aa41ca44764e786b738047456cc80d021e
 sizekey = 0x40 = 64bytes đúng với logic tạo key
 key = "WTPjWbJafqNPqrZFswaijmyVKMddOrKzukegbVDpXJqDfulPDmDwDasqTwxvibnM"
 ```
-![image](https://hackmd.io/_uploads/HJyeQzSRJe.png)
+![image](/images/hackmd/HJyeQzSRJe.png)
 
 có key rồi decrypt luôn payload tiếp theo đã đc gửi từ attacker tới target đầu tiên là len data tiếp theo là data và sau đó bị encrypted bởi rc4_encrypt sau đó có vẻ như nó load file này vào memory và chạy file
 ## Load file Drop (chức năng tinh chỉnh key)
@@ -484,7 +484,7 @@ và attacker sẽ import manual các functionName của file PE này vào sử d
 
 sau khi PEloader thành công attacker đã tạo một file BMP
 và sau đó gửi size của file
-![image](https://hackmd.io/_uploads/By4ocMrCkg.png)
+![image](/images/hackmd/By4ocMrCkg.png)
 
 
 
@@ -495,17 +495,17 @@ filter wirshark : ip.addr==192.168.89.136 and tcp.dstport==51392 and tcp.srcport
 với gửi len data ở gói packetid == 10
 và data ở gói packetid == 11 trở đi để thuận tiện ta sẽ lấy payload ở TCP stream
 ```
-![image](https://hackmd.io/_uploads/BJoXPGH01e.png)
+![image](/images/hackmd/BJoXPGH01e.png)
 download file về
 
 ## AddVectoredExceptionHandler
-![image](https://hackmd.io/_uploads/H14ejMSRkl.png)
+![image](/images/hackmd/H14ejMSRkl.png)
 
 ```
 dword_42039C nó là một APIwindows AddVectoredExceptionHandler
 một dạng bắn ExceptionCode để xử lý logic code thật
 ```
-![image](https://hackmd.io/_uploads/rJBwXEH0yl.png)
+![image](/images/hackmd/rJBwXEH0yl.png)
 sau khi fix
 ```
 LONG __stdcall Handler(struct _EXCEPTION_POINTERS *ExceptionInfo)
@@ -697,7 +697,7 @@ with open("pic.bmp", "wb") as f:
 
 ```
 
-![image](https://hackmd.io/_uploads/SyEdvv0Rkg.png)
+![image](/images/hackmd/SyEdvv0Rkg.png)
 
 
 
