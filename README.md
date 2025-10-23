@@ -23,7 +23,6 @@
 
 | Domain | Tools / Frameworks |
 |:-------|:-------------------|
-| **SOC & SIEM** | Wazuh, Splunk, ELK, Sigma Rules, Sysmon |
 | **Incident Response** | Volatility3, KAPE, pypykatz, Autopsy, DFIR-Orc |
 | **Threat Hunting** | Zeek, Suricata, Wireshark, SysmonView |
 | **Malware Analysis** | IDA Pro, Ghidra, x64dbg, PEStudio, YARA |
