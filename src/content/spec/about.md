@@ -21,7 +21,7 @@ I have been sharpening my skills and knowledge through **domestic and internatio
   - 🥇 Top 9 – VishwaCTF 2025  
   - 🥇 Top 8 – BlitzCTF 2025  
   - 🥇 Top 3 – CapturePoint 5353 3.0 CTF  
-  - 🥇 Top 7 – HacktheOn Sejong Finals 2025  
+  - 🥇 Top 42 - HTB Sherlock Homeless - Blue Team Only CTF 2025
 
 ---
 
